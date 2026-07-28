@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Env files (keep .env.example)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# Prisma
+server/prisma/dev.db
+
+# Firebase
+.firebase/
+firebase-debug.log
+
+# Test/coverage
+coverage/
+
+# Docker volumes
+pgdata/

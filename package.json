@@ -1,0 +1,42 @@
+{
+  "name": "pindrop",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "PinDrop - consent-based location sharing SaaS",
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,client -c blue,green \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -w shared && npm run build -w server && npm run build -w client",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "db:migrate": "npm run prisma:migrate -w server",
+    "db:seed": "npm run prisma:seed -w server",
+    "db:studio": "npm run prisma:studio -w server",
+    "prepare": "npm run build -w shared"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "eslint": "^10.8.0",
+    "@eslint/js": "^10.0.1",
+    "globals": "^15.14.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.4.18",
+    "typescript-eslint": "^8.20.0",
+    "prettier": "^3.4.2",
+    "typescript": "^6.0.2"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "allowScripts": {
+    "@prisma/client@6.19.3": true,
+    "@prisma/engines@6.19.3": true,
+    "esbuild@0.28.1": true,
+    "prisma@6.19.3": true
+  }
+}

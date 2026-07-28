@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Theme {
+  LIGHT
+  DARK
+  SYSTEM
+}
+
+enum PermissionStatus {
+  GRANTED
+  DENIED
+}
+
+enum DeviceType {
+  DESKTOP
+  MOBILE
+  TABLET
+  UNKNOWN
+}
+
+model User {
+  id                  String               @id @default(uuid())
+  email               String               @unique
+  passwordHash        String?
+  googleId            String?              @unique
+  name                String?
+  theme               Theme                @default(SYSTEM)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  links               Link[]
+  refreshTokens       RefreshToken[]
+  passwordResetTokens PasswordResetToken[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash  String    @unique
+  rememberMe Boolean   @default(false)
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  userAgent  String?
+  ipAddress  String?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+model Link {
+  id          String           @id @default(uuid())
+  shortId     String           @unique
+  userId      String
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  notes       String?
+  expiresAt   DateTime?
+  maxUses     Int?
+  useCount    Int              @default(0)
+  disabled    Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  locations   LocationRecord[]
+
+  @@index([userId])
+  @@map("links")
+}
+
+model LocationRecord {
+  id               String           @id @default(uuid())
+  linkId           String
+  link             Link             @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  visitorId        String           @default(uuid())
+  permissionStatus PermissionStatus
+  lat              Float?
+  lng              Float?
+  accuracy         Float?
+  capturedAt       DateTime?
+  country          String?
+  state            String?
+  city             String?
+  postalCode       String?
+  displayAddress   String?
+  ipCountry        String?
+  ipAddressHash    String?
+  timezone         String?
+  language         String?
+  userAgent        String?
+  browser          String?
+  browserVersion   String?
+  os               String?
+  osVersion        String?
+  deviceType       DeviceType       @default(UNKNOWN)
+  screenResolution String?
+  viewportSize     String?
+  createdAt        DateTime         @default(now())
+
+  @@index([linkId])
+  @@index([createdAt])
+  @@index([permissionStatus])
+  @@map("location_records")
+}
+
+model NominatimCache {
+  id           String   @id @default(uuid())
+  latRounded   Float
+  lngRounded   Float
+  responseJson Json
+  fetchedAt    DateTime @default(now())
+
+  @@unique([latRounded, lngRounded])
+  @@map("nominatim_cache")
+}
