@@ -4,6 +4,7 @@ import type {
   ChangePasswordInput,
   UpdateThemeInput,
   DeleteAccountInput,
+  SetUsernameInput,
 } from '@pindrop/shared';
 import { prisma } from '../../lib/prisma.js';
 import { env } from '../../config/env.js';
@@ -52,6 +53,22 @@ export async function changePassword(userId: string, input: ChangePasswordInput)
 export async function updateTheme(userId: string, input: UpdateThemeInput) {
   const user = await prisma.user.update({ where: { id: userId }, data: { theme: input.theme } });
   return toUserDTO(user);
+}
+
+export async function setUsername(userId: string, input: SetUsernameInput) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw notFound('User not found');
+  // Permanent by design: once set, there's no route back through this handler.
+  if (user.username) throw conflict('Username is already set and cannot be changed');
+
+  const existing = await prisma.user.findUnique({ where: { username: input.username } });
+  if (existing) throw conflict('That username is already taken');
+
+  const updated = await prisma.user.update({
+    where: { id: userId },
+    data: { username: input.username },
+  });
+  return toUserDTO(updated);
 }
 
 export async function deleteAccount(userId: string, input: DeleteAccountInput) {

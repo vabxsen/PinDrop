@@ -19,6 +19,20 @@ export const updateThemeSchema = z.object({
 });
 export type UpdateThemeInput = z.infer<typeof updateThemeSchema>;
 
+// Lowercase only (case preserved as typed would make "Foo" and "foo" collide on
+// lookup anyway) so the uniqueness check and storage always agree on one casing.
+export const setUsernameSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .regex(
+      /^[a-z][a-z0-9_]{2,19}$/,
+      'Use 3-20 characters: lowercase letters, numbers, and underscores, starting with a letter.',
+    ),
+});
+export type SetUsernameInput = z.infer<typeof setUsernameSchema>;
+
 export const deleteAccountSchema = z.object({
   password: z.string().max(128).optional().default(''),
 });

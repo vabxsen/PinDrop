@@ -5,6 +5,7 @@ export interface UserDTO {
   email: string;
   name: string | null;
   avatarUrl: string | null;
+  username: string | null;
   theme: Theme;
   hasPassword: boolean;
   createdAt: string;

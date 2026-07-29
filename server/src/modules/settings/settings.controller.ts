@@ -4,6 +4,7 @@ import type {
   ChangePasswordInput,
   UpdateThemeInput,
   DeleteAccountInput,
+  SetUsernameInput,
 } from '@pindrop/shared';
 import * as settingsService from './settings.service.js';
 import { REFRESH_TOKEN_COOKIE_NAME } from '../../config/constants.js';
@@ -24,6 +25,12 @@ export async function changePasswordHandler(req: Request, res: Response) {
 export async function updateThemeHandler(req: Request, res: Response) {
   const input = req.validated.body as UpdateThemeInput;
   const user = await settingsService.updateTheme(req.user!.id, input);
+  res.json({ user });
+}
+
+export async function setUsernameHandler(req: Request, res: Response) {
+  const input = req.validated.body as SetUsernameInput;
+  const user = await settingsService.setUsername(req.user!.id, input);
   res.json({ user });
 }
 

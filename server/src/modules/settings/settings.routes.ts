@@ -4,6 +4,7 @@ import {
   changePasswordSchema,
   updateThemeSchema,
   deleteAccountSchema,
+  setUsernameSchema,
 } from '@pindrop/shared';
 import { validate } from '../../middleware/validate.middleware.js';
 import { requireAuth } from '../../middleware/auth.middleware.js';
@@ -24,6 +25,11 @@ settingsRoutes.patch(
   settingsController.changePasswordHandler,
 );
 settingsRoutes.patch('/theme', validate(updateThemeSchema), settingsController.updateThemeHandler);
+settingsRoutes.patch(
+  '/username',
+  validate(setUsernameSchema),
+  settingsController.setUsernameHandler,
+);
 settingsRoutes.delete(
   '/account',
   validate(deleteAccountSchema),

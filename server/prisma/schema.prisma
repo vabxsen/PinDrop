@@ -33,6 +33,7 @@ model User {
   googleId            String?              @unique
   name                String?
   avatarUrl           String?
+  username            String?              @unique
   theme               Theme                @default(SYSTEM)
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt

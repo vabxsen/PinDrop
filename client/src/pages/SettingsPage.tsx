@@ -6,16 +6,20 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   updateProfileSchema,
   changePasswordSchema,
+  setUsernameSchema,
   type UpdateProfileInput,
   type ChangePasswordInput,
+  type SetUsernameInput,
   type Theme,
 } from '@pindrop/shared';
 import { z } from 'zod';
-import { Check, Monitor, Moon, Sun } from 'lucide-react';
+import { AtSign, Check, Lock, Mail, Monitor, Moon, Sun, User } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Avatar } from '@/components/ui/Avatar';
 import { settingsApi, ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import { cn } from '@/lib/cn';
@@ -50,25 +54,141 @@ function ProfileSection() {
     }
   }
 
+  if (!user) return null;
+
   return (
     <Card>
       <CardHeader>
         <CardTitle>Profile</CardTitle>
-        <CardDescription>Your name and email address.</CardDescription>
+        <CardDescription>Your public identity on PinDrop.</CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="flex items-center gap-4 border-b border-slate-100 pb-6 dark:border-slate-800">
+          <Avatar name={user.name} email={user.email} avatarUrl={user.avatarUrl} size="lg" />
+          <div className="min-w-0">
+            <p className="truncate text-base font-semibold text-slate-900 dark:text-white">
+              {user.name || 'Unnamed'}
+            </p>
+            <p className="truncate text-sm text-slate-500 dark:text-slate-400">{user.email}</p>
+          </div>
+        </div>
+
         <form
           onSubmit={handleSubmit(onSubmit)}
           noValidate
-          className="flex flex-col gap-4 sm:max-w-sm"
+          className="mt-6 flex flex-col gap-4 sm:max-w-sm"
         >
-          <Input label="Name" error={errors.name?.message} {...register('name')} />
-          <Input label="Email" type="email" error={errors.email?.message} {...register('email')} />
+          <Input
+            label="Name"
+            icon={<User className="h-4 w-4" aria-hidden="true" />}
+            error={errors.name?.message}
+            {...register('name')}
+          />
+          <Input
+            label="Email"
+            type="email"
+            icon={<Mail className="h-4 w-4" aria-hidden="true" />}
+            error={errors.email?.message}
+            {...register('email')}
+          />
           <Button type="submit" loading={isSubmitting} className="self-start">
             Save changes
           </Button>
         </form>
       </CardContent>
+    </Card>
+  );
+}
+
+function UsernameSection() {
+  const { user, setUser } = useAuth();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingUsername, setPendingUsername] = useState('');
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SetUsernameInput>({
+    resolver: zodResolver(setUsernameSchema),
+    defaultValues: { username: '' },
+  });
+
+  if (!user) return null;
+
+  function onValidated(data: SetUsernameInput) {
+    setPendingUsername(data.username);
+    setConfirmOpen(true);
+  }
+
+  async function confirmClaim() {
+    try {
+      const result = await settingsApi.setUsername(pendingUsername);
+      setUser(result.user);
+      toast.success(`Username set to @${result.user.username}`);
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : 'Failed to set username');
+    }
+  }
+
+  if (user.username) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Username</CardTitle>
+          <CardDescription>Your permanent, unique handle on PinDrop.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-2.5 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-800 dark:bg-slate-800/50">
+            <Lock className="h-4 w-4 shrink-0 text-slate-400 dark:text-slate-500" aria-hidden="true" />
+            <span className="font-mono text-sm font-medium text-slate-900 dark:text-white">
+              @{user.username}
+            </span>
+          </div>
+          <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+            Usernames are permanent and can&apos;t be changed once set.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Username</CardTitle>
+        <CardDescription>
+          Claim a unique handle for your profile. This is permanent and can&apos;t be changed
+          once set.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form
+          onSubmit={handleSubmit(onValidated)}
+          noValidate
+          className="flex flex-col gap-4 sm:max-w-sm"
+        >
+          <Input
+            label="Username"
+            icon={<AtSign className="h-4 w-4" aria-hidden="true" />}
+            placeholder="yourname"
+            error={errors.username?.message}
+            hint="3-20 characters: lowercase letters, numbers, and underscores."
+            {...register('username')}
+          />
+          <Button type="submit" className="self-start">
+            Claim username
+          </Button>
+        </form>
+      </CardContent>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        onConfirm={confirmClaim}
+        title="Set your username?"
+        description={`Your username will be set to "@${pendingUsername}". This is permanent — it can't be changed later.`}
+        confirmLabel="Yes, set it permanently"
+      />
     </Card>
   );
 }
@@ -344,7 +464,12 @@ export function SettingsPage() {
         ))}
       </div>
 
-      {activeTab === 'profile' && <ProfileSection />}
+      {activeTab === 'profile' && (
+        <>
+          <ProfileSection />
+          <UsernameSection />
+        </>
+      )}
       {activeTab === 'account' && (
         <>
           <PasswordSection />

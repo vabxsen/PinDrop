@@ -243,6 +243,8 @@ export const settingsApi = {
     apiRequest<{ message: string }>('/api/settings/password', { method: 'PATCH', body: input }),
   updateTheme: (theme: Theme) =>
     apiRequest<{ user: UserDTO }>('/api/settings/theme', { method: 'PATCH', body: { theme } }),
+  setUsername: (username: string) =>
+    apiRequest<{ user: UserDTO }>('/api/settings/username', { method: 'PATCH', body: { username } }),
   deleteAccount: (password: string) =>
     apiRequest<void>('/api/settings/account', { method: 'DELETE', body: { password } }),
 };
