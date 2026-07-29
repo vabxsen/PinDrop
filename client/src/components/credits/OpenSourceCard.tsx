@@ -13,10 +13,24 @@ export function OpenSourceCard() {
           <CardTitle>Open Source</CardTitle>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-4">
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          PinDrop is built on the incredible work of the open-source community. Special thanks to
-          the developers and maintainers whose tools make projects like this possible.
+          Great software is never built alone. PinDrop is powered by the creativity and dedication
+          of the global open-source community. Their work makes independent projects like this
+          possible.
+        </p>
+        <div>
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-400 dark:text-slate-500">
+            Crafted by
+          </p>
+          <p className="mt-1 text-base font-semibold text-slate-900 dark:text-white">
+            Vaibhav Sen
+          </p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">Independent Developer</p>
+        </div>
+        <p className="text-sm text-slate-500 dark:text-slate-400">
+          From the first sketch to the final deployment, every detail of PinDrop was designed and
+          developed with precision, performance, and privacy in mind.
         </p>
       </CardContent>
     </Card>
