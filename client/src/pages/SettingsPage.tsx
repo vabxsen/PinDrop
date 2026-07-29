@@ -15,6 +15,7 @@ import {
 import { z } from 'zod';
 import { AtSign, Check, Lock, Mail, Monitor, Moon, Sun, User } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
@@ -499,6 +500,29 @@ const THEME_OPTIONS: { value: ThemePreference; label: string; icon: typeof Sun }
   { value: 'system', label: 'System', icon: Monitor },
 ];
 
+function ThemeSwatchHalf({ variant }: { variant: 'light' | 'dark' }) {
+  const dark = variant === 'dark';
+  return (
+    <div className={cn('flex h-full w-full flex-col', dark ? 'bg-slate-900' : 'bg-white')}>
+      <div className={cn('h-2.5 w-full', dark ? 'bg-slate-800' : 'bg-slate-100')} />
+      <div className="flex flex-1 flex-col justify-center gap-1 px-2">
+        <div className={cn('h-1 w-3/4 rounded-full', dark ? 'bg-slate-700' : 'bg-slate-200')} />
+        <div className={cn('h-1 w-1/2 rounded-full', dark ? 'bg-slate-700' : 'bg-slate-200')} />
+      </div>
+    </div>
+  );
+}
+
+function ThemeSwatchPreview({ mode }: { mode: ThemePreference }) {
+  return (
+    <div className="flex h-14 w-full overflow-hidden rounded-lg border border-slate-200 dark:border-slate-700">
+      <ThemeSwatchHalf variant="light" />
+      {mode === 'system' && <ThemeSwatchHalf variant="dark" />}
+      {mode === 'dark' && <ThemeSwatchHalf variant="dark" />}
+    </div>
+  );
+}
+
 function AppearanceSection() {
   const { setUser } = useAuth();
   const [theme, setTheme] = useState<ThemePreference>(getStoredTheme);
@@ -526,27 +550,45 @@ function AppearanceSection() {
         <CardTitle>Appearance</CardTitle>
         <CardDescription>Customize how PinDrop looks on this device.</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-6">
+      <CardContent className="flex flex-col gap-8">
         <div>
           <p className="mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">Theme</p>
-          <div className="flex flex-wrap gap-2">
-            {THEME_OPTIONS.map(({ value, label, icon: Icon }) => (
-              <button
-                key={value}
-                type="button"
-                onClick={() => chooseTheme(value)}
-                aria-pressed={theme === value}
-                className={cn(
-                  'flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors duration-150',
-                  theme === value
-                    ? 'border-brand-600 bg-brand-50 text-brand-700 dark:border-brand-400 dark:bg-brand-500/15 dark:text-brand-300'
-                    : 'border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-800',
-                )}
-              >
-                <Icon className="h-4 w-4" aria-hidden="true" />
-                {label}
-              </button>
-            ))}
+          <div className="grid max-w-sm grid-cols-3 gap-3">
+            {THEME_OPTIONS.map(({ value, label, icon: Icon }) => {
+              const active = theme === value;
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => chooseTheme(value)}
+                  aria-pressed={active}
+                  className={cn(
+                    'group relative flex flex-col items-center gap-2 rounded-xl border-2 p-2 transition-colors duration-150',
+                    active
+                      ? 'border-brand-600'
+                      : 'border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/50',
+                  )}
+                >
+                  <ThemeSwatchPreview mode={value} />
+                  <span
+                    className={cn(
+                      'flex items-center gap-1.5 text-xs font-medium',
+                      active
+                        ? 'text-brand-700 dark:text-brand-300'
+                        : 'text-slate-600 dark:text-slate-400',
+                    )}
+                  >
+                    <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+                    {label}
+                  </span>
+                  {active && (
+                    <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-brand-600 text-white ring-2 ring-white dark:ring-slate-900">
+                      <Check className="h-3 w-3" aria-hidden="true" />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -554,26 +596,46 @@ function AppearanceSection() {
           <p className="mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">
             Accent color
           </p>
-          <div className="flex flex-wrap gap-3">
-            {ACCENT_PRESETS.map((preset) => (
-              <button
-                key={preset.key}
-                type="button"
-                onClick={() => chooseAccent(preset.key)}
-                aria-label={preset.label}
-                aria-pressed={accent === preset.key}
-                title={preset.label}
-                className={cn(
-                  'flex h-10 w-10 items-center justify-center rounded-full ring-2 ring-offset-2 ring-offset-white transition-shadow duration-150 dark:ring-offset-slate-900',
-                  accent === preset.key ? 'ring-slate-900 dark:ring-white' : 'ring-transparent',
-                )}
-                style={{ backgroundColor: preset.swatch }}
-              >
-                {accent === preset.key && (
-                  <Check className="h-4 w-4 text-white" aria-hidden="true" />
-                )}
-              </button>
-            ))}
+          <div className="flex flex-wrap gap-4">
+            {ACCENT_PRESETS.map((preset) => {
+              const active = accent === preset.key;
+              return (
+                <button
+                  key={preset.key}
+                  type="button"
+                  onClick={() => chooseAccent(preset.key)}
+                  aria-pressed={active}
+                  className="flex cursor-pointer flex-col items-center gap-1.5"
+                >
+                  <span
+                    className={cn(
+                      'flex h-10 w-10 items-center justify-center rounded-full ring-2 ring-offset-2 ring-offset-white transition-all duration-150 dark:ring-offset-slate-900',
+                      active
+                        ? 'ring-slate-900 dark:ring-white'
+                        : 'ring-transparent hover:ring-slate-300 dark:hover:ring-slate-600',
+                    )}
+                    style={{ backgroundColor: preset.swatch }}
+                  >
+                    {active && <Check className="h-4 w-4 text-white" aria-hidden="true" />}
+                  </span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400">
+                    {preset.label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div>
+          <p className="mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">Preview</p>
+          <div className="flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-800/40">
+            <Button size="sm">Primary button</Button>
+            <Badge tone="brand">Badge</Badge>
+            <span className="h-8 w-8 rounded-full bg-brand-600" aria-hidden="true" />
+            <span className="text-sm font-medium text-brand-600 dark:text-brand-400">
+              Link text
+            </span>
           </div>
         </div>
       </CardContent>
