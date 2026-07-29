@@ -13,7 +13,20 @@ import {
   type Theme,
 } from '@pindrop/shared';
 import { z } from 'zod';
-import { AtSign, Check, Lock, Mail, Monitor, Moon, Sun, User } from 'lucide-react';
+import {
+  Award,
+  AtSign,
+  Check,
+  Lock,
+  Mail,
+  Monitor,
+  Moon,
+  Palette,
+  ShieldCheck,
+  Sun,
+  User,
+} from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
@@ -644,15 +657,16 @@ function AppearanceSection() {
 }
 
 const TABS = [
-  { key: 'profile', label: 'Profile' },
-  { key: 'account', label: 'Account' },
-  { key: 'appearance', label: 'Appearance' },
-  { key: 'credits', label: 'Credits' },
+  { key: 'profile', label: 'Profile', icon: User },
+  { key: 'account', label: 'Account', icon: ShieldCheck },
+  { key: 'appearance', label: 'Appearance', icon: Palette },
+  { key: 'credits', label: 'Credits', icon: Award },
 ] as const;
 type TabKey = (typeof TABS)[number]['key'];
 
 export function SettingsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const reduceMotion = useReducedMotion() ?? false;
   const requestedTab = searchParams.get('tab');
   const activeTab: TabKey = TABS.some((t) => t.key === requestedTab)
     ? (requestedTab as TabKey)
@@ -665,40 +679,63 @@ export function SettingsPage() {
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage your account.</p>
       </div>
 
-      <div className="flex gap-1 overflow-x-auto border-b border-slate-200 dark:border-slate-800">
-        {TABS.map((tab) => (
-          <button
-            key={tab.key}
-            type="button"
-            onClick={() => setSearchParams({ tab: tab.key })}
-            aria-current={activeTab === tab.key}
-            className={cn(
-              'whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition-colors duration-150',
-              activeTab === tab.key
-                ? 'border-brand-600 text-brand-700 dark:border-brand-400 dark:text-brand-300'
-                : 'border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100',
-            )}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+      <div className="flex flex-col gap-6 sm:flex-row sm:gap-8">
+        <nav
+          aria-label="Settings sections"
+          className="flex gap-1 overflow-x-auto pb-1 sm:w-52 sm:shrink-0 sm:flex-col sm:overflow-visible sm:border-r sm:border-slate-200 sm:pb-0 sm:pr-4 dark:sm:border-slate-800"
+        >
+          {TABS.map((tab) => {
+            const active = activeTab === tab.key;
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setSearchParams({ tab: tab.key })}
+                aria-current={active ? 'page' : undefined}
+                className={cn(
+                  'flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors duration-150 sm:w-full',
+                  active
+                    ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300'
+                    : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800',
+                )}
+              >
+                <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                {tab.label}
+              </button>
+            );
+          })}
+        </nav>
 
-      {activeTab === 'profile' && (
-        <>
-          <ProfileSection />
-          <UsernameSection />
-        </>
-      )}
-      {activeTab === 'account' && (
-        <>
-          <ConnectedAccountsSection />
-          <PasswordSection />
-          <DangerZoneSection />
-        </>
-      )}
-      {activeTab === 'appearance' && <AppearanceSection />}
-      {activeTab === 'credits' && <CreditsSection />}
+        <div className="min-w-0 flex-1 overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduceMotion ? undefined : { opacity: 0, y: -8 }}
+              transition={{ duration: reduceMotion ? 0.01 : 0.2, ease: [0.4, 0, 0.2, 1] }}
+              className="flex flex-col gap-6"
+            >
+              {activeTab === 'profile' && (
+                <>
+                  <ProfileSection />
+                  <UsernameSection />
+                </>
+              )}
+              {activeTab === 'account' && (
+                <>
+                  <ConnectedAccountsSection />
+                  <PasswordSection />
+                  <DangerZoneSection />
+                </>
+              )}
+              {activeTab === 'appearance' && <AppearanceSection />}
+              {activeTab === 'credits' && <CreditsSection />}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
     </div>
   );
 }
