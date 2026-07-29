@@ -37,11 +37,15 @@ export function LandingPage() {
         animate={
           reduceMotion
             ? undefined
-            : isCreateOpen
-              ? { x: ['0%', '-8%', '-100%'], filter: ['blur(0px)', 'blur(10px)', 'blur(0px)'] }
-              : { x: ['-100%', '-8%', '0%'], filter: ['blur(0px)', 'blur(10px)', 'blur(0px)'] }
+            : {
+                x: isCreateOpen ? '-100%' : '0%',
+                filter: ['blur(0px)', 'blur(10px)', 'blur(0px)'],
+              }
         }
-        transition={{ duration: 0.6, ease: sectionEase }}
+        transition={{
+          x: { duration: 0.6, ease: sectionEase },
+          filter: { duration: 0.6, ease: 'easeInOut' },
+        }}
       >
         <LandingHero />
         <ConsentEditorial />
