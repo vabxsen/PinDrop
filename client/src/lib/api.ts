@@ -22,7 +22,11 @@ import type {
   VisitorLocationInput,
 } from '@pindrop/shared';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL as string;
+// Empty string in production: Firebase Hosting rewrites /api/** to the API on
+// whichever domain served the page (web.app, firebaseapp.com, or a future custom
+// domain), so a relative path keeps requests same-origin everywhere instead of
+// pinning them to one hard-coded host.
+const API_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? '';
 
 export interface AuthSession {
   user: UserDTO;

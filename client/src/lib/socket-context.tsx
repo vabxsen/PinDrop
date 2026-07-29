@@ -4,7 +4,9 @@ import { io, type Socket } from 'socket.io-client';
 import { authApi, getAccessToken } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL as string;
+// Falsy in production: same reasoning as API_BASE in lib/api.ts — omit the URL so
+// socket.io-client connects to the page's own origin instead of a hard-coded host.
+const SOCKET_URL = (import.meta.env.VITE_SOCKET_URL as string | undefined) || undefined;
 
 const SocketContext = createContext<Socket | null>(null);
 
