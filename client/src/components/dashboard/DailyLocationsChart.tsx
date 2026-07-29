@@ -7,6 +7,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { TrendingUp } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { useIsDark } from '@/lib/theme';
 import { chartTokens } from '@/lib/chart-colors';
@@ -24,7 +25,10 @@ export function DailyLocationsChart({ data }: { data: DailyLocationsPoint[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Locations received</CardTitle>
+        <div className="flex items-center gap-2">
+          <TrendingUp className="h-4 w-4 text-slate-400 dark:text-slate-500" aria-hidden="true" />
+          <CardTitle>Locations received</CardTitle>
+        </div>
         <CardDescription>Last 30 days</CardDescription>
       </CardHeader>
       <CardContent className="pl-0">

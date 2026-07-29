@@ -1,9 +1,12 @@
 import { useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
+import { Clock, Link2, MapPin, XCircle } from 'lucide-react';
 import { dashboardApi } from '@/lib/api';
 import { useSocketEvent } from '@/lib/socket-context';
+import { useAuth } from '@/lib/auth-context';
 import { StatTile } from '@/components/ui/StatTile';
+import { LiveStatusDot } from '@/components/ui/LiveStatusDot';
 import { DailyLocationsChart } from '@/components/dashboard/DailyLocationsChart';
 import { TopCountriesChart } from '@/components/dashboard/TopCountriesChart';
 import { AcceptanceRateChart } from '@/components/dashboard/AcceptanceRateChart';
@@ -21,6 +24,7 @@ interface PermissionDeniedPayload {
 
 export function DashboardPage() {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const invalidateAll = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ['dashboard'] });
@@ -69,90 +73,46 @@ export function DashboardPage() {
     );
   }
 
+  const firstName = user?.name?.trim().split(' ')[0];
+
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Dashboard</h1>
-        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-          A live overview of your links and their responses.
-        </p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+            {firstName ? `Welcome back, ${firstName}` : 'Dashboard'}
+          </h1>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            A live overview of your links and their responses.
+          </p>
+        </div>
+        <LiveStatusDot />
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatTile
           label="Total links"
           value={stats.data?.totalLinks ?? 0}
-          icon={
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="h-4.5 w-4.5"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12h6M10 17H7a4 4 0 1 1 0-8h1M14 7h3a4 4 0 1 1 0 8h-1"
-              />
-            </svg>
-          }
+          tone="brand"
+          icon={<Link2 className="h-4.5 w-4.5" aria-hidden="true" />}
         />
         <StatTile
           label="Locations received"
           value={stats.data?.locationsReceived ?? 0}
-          icon={
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="h-4.5 w-4.5"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 21c-4.97-4.24-8-7.9-8-11.5A8 8 0 0 1 20 9.5c0 3.6-3.03 7.26-8 11.5Z"
-              />
-              <circle cx="12" cy="9.5" r="2.5" />
-            </svg>
-          }
+          tone="success"
+          icon={<MapPin className="h-4.5 w-4.5" aria-hidden="true" />}
         />
         <StatTile
           label="Active links"
           value={stats.data?.pendingLinks ?? 0}
-          icon={
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="h-4.5 w-4.5"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="9" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 7v5l3 3" />
-            </svg>
-          }
+          tone="warning"
+          icon={<Clock className="h-4.5 w-4.5" aria-hidden="true" />}
         />
         <StatTile
           label="Permission denied"
           value={stats.data?.permissionDeniedCount ?? 0}
-          icon={
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="h-4.5 w-4.5"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="9" />
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 9l6 6M15 9l-6 6" />
-            </svg>
-          }
+          tone="danger"
+          icon={<XCircle className="h-4.5 w-4.5" aria-hidden="true" />}
         />
       </div>
 

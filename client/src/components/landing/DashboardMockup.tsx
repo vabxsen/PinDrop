@@ -3,7 +3,7 @@ import { Clock, Crosshair, Download, Globe, Monitor } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { buttonVariants } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
-import { LiveStatusDot } from './LiveStatusDot';
+import { LiveStatusDot } from '@/components/ui/LiveStatusDot';
 import { VisitorCard } from './VisitorCard';
 import { MockWorldMap } from './MockWorldMap';
 import { mockLinkTitle, mockVisitors, primaryVisitor } from './mockData';

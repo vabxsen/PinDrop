@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import { PieChart as PieChartIcon } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useIsDark } from '@/lib/theme';
@@ -19,7 +20,13 @@ export function AcceptanceRateChart({ data }: { data: AcceptanceRate }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Consent rate</CardTitle>
+        <div className="flex items-center gap-2">
+          <PieChartIcon
+            className="h-4 w-4 text-slate-400 dark:text-slate-500"
+            aria-hidden="true"
+          />
+          <CardTitle>Consent rate</CardTitle>
+        </div>
         <CardDescription>Granted vs. denied</CardDescription>
       </CardHeader>
       <CardContent>

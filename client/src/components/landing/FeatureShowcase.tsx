@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { Badge } from '@/components/ui/Badge';
 import { buttonVariants } from '@/components/ui/Button';
 import { FeatureRow } from './FeatureRow';
-import { LiveStatusDot } from './LiveStatusDot';
+import { LiveStatusDot } from '@/components/ui/LiveStatusDot';
 import { fadeUp, staggerContainer, viewportOnce } from './motion';
 import { mockVisitors } from './mockData';
 

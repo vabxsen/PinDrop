@@ -1,4 +1,5 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Globe2 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useIsDark } from '@/lib/theme';
@@ -12,7 +13,10 @@ export function TopCountriesChart({ data }: { data: TopCountryPoint[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Top countries</CardTitle>
+        <div className="flex items-center gap-2">
+          <Globe2 className="h-4 w-4 text-slate-400 dark:text-slate-500" aria-hidden="true" />
+          <CardTitle>Top countries</CardTitle>
+        </div>
         <CardDescription>By visitor location</CardDescription>
       </CardHeader>
       <CardContent>
