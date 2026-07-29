@@ -6,6 +6,7 @@ import type {
   UpdateThemeInput,
   DeleteAccountInput,
   SetUsernameInput,
+  SetAvatarPresetInput,
   GoogleLoginInput,
 } from '@pindrop/shared';
 import { prisma } from '../../lib/prisma.js';
@@ -73,6 +74,22 @@ export async function setUsername(userId: string, input: SetUsernameInput) {
     data: { username: input.username },
   });
   return toUserDTO(updated);
+}
+
+export async function setAvatarPreset(userId: string, input: SetAvatarPresetInput) {
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: { avatarPreset: input.avatarPreset },
+  });
+  return toUserDTO(user);
+}
+
+export async function clearAvatarPreset(userId: string) {
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: { avatarPreset: null },
+  });
+  return toUserDTO(user);
 }
 
 export async function linkGoogle(userId: string, input: GoogleLoginInput) {

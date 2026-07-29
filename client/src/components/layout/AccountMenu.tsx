@@ -64,7 +64,12 @@ export function AccountMenu() {
         aria-label="Account menu"
         className="flex cursor-pointer items-center gap-1 rounded-full p-0.5 transition-colors duration-150 hover:bg-slate-100 dark:hover:bg-slate-800"
       >
-        <Avatar name={user.name} email={user.email} avatarUrl={user.avatarUrl} />
+        <Avatar
+          name={user.name}
+          email={user.email}
+          avatarUrl={user.avatarUrl}
+          avatarPreset={user.avatarPreset}
+        />
         <ChevronDown
           className={cn(
             'h-4 w-4 text-slate-400 transition-transform duration-150',
@@ -80,7 +85,13 @@ export function AccountMenu() {
           className="absolute right-0 top-full z-40 mt-2 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white py-2 shadow-xl dark:border-slate-800 dark:bg-slate-900"
         >
           <div className="flex items-center gap-3 px-4 py-3">
-            <Avatar name={user.name} email={user.email} avatarUrl={user.avatarUrl} size="lg" />
+            <Avatar
+              name={user.name}
+              email={user.email}
+              avatarUrl={user.avatarUrl}
+              avatarPreset={user.avatarPreset}
+              size="lg"
+            />
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">
                 {user.name || 'PinDrop user'}

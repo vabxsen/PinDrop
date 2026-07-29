@@ -1,10 +1,11 @@
-import type { DeviceType, PermissionStatus, Theme } from './enums.js';
+import type { AvatarPreset, DeviceType, PermissionStatus, Theme } from './enums.js';
 
 export interface UserDTO {
   id: string;
   email: string;
   name: string | null;
   avatarUrl: string | null;
+  avatarPreset: AvatarPreset | null;
   username: string | null;
   theme: Theme;
   hasPassword: boolean;

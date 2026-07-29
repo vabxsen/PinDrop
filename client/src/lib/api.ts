@@ -1,6 +1,7 @@
 import { CSRF_COOKIE_NAME } from '@pindrop/shared';
 import type {
   ApiErrorResponse,
+  AvatarPreset,
   ChangePasswordInput,
   CreateLinkInput,
   DashboardStatsDTO,
@@ -245,6 +246,12 @@ export const settingsApi = {
     apiRequest<{ user: UserDTO }>('/api/settings/theme', { method: 'PATCH', body: { theme } }),
   setUsername: (username: string) =>
     apiRequest<{ user: UserDTO }>('/api/settings/username', { method: 'PATCH', body: { username } }),
+  setAvatarPreset: (avatarPreset: AvatarPreset) =>
+    apiRequest<{ user: UserDTO }>('/api/settings/avatar', {
+      method: 'PATCH',
+      body: { avatarPreset },
+    }),
+  clearAvatarPreset: () => apiRequest<{ user: UserDTO }>('/api/settings/avatar', { method: 'DELETE' }),
   linkGoogle: (idToken: string) =>
     apiRequest<{ user: UserDTO }>('/api/settings/google', { method: 'PATCH', body: { idToken } }),
   unlinkGoogle: () => apiRequest<{ user: UserDTO }>('/api/settings/google', { method: 'DELETE' }),

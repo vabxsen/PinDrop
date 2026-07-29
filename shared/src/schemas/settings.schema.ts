@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { emailSchema, passwordSchema } from './auth.schema.js';
-import { THEME_VALUES } from '../types/enums.js';
+import { AVATAR_PRESET_VALUES, THEME_VALUES } from '../types/enums.js';
 
 export const updateProfileSchema = z.object({
   name: z.string().trim().min(1).max(100).optional().nullable(),
@@ -32,6 +32,11 @@ export const setUsernameSchema = z.object({
     ),
 });
 export type SetUsernameInput = z.infer<typeof setUsernameSchema>;
+
+export const setAvatarPresetSchema = z.object({
+  avatarPreset: z.enum(AVATAR_PRESET_VALUES),
+});
+export type SetAvatarPresetInput = z.infer<typeof setAvatarPresetSchema>;
 
 export const deleteAccountSchema = z.object({
   password: z.string().max(128).optional().default(''),

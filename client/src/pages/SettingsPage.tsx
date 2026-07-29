@@ -22,6 +22,7 @@ import {
   Monitor,
   Moon,
   Palette,
+  Pencil,
   ShieldCheck,
   Sun,
   User,
@@ -34,6 +35,7 @@ import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Avatar } from '@/components/ui/Avatar';
+import { AvatarPickerDialog } from '@/components/settings/AvatarPickerDialog';
 import { settingsApi, ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import { cn } from '@/lib/cn';
@@ -207,6 +209,7 @@ function ConnectedAccountsSection() {
 
 function ProfileSection() {
   const { user, setUser } = useAuth();
+  const [avatarPickerOpen, setAvatarPickerOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -236,7 +239,23 @@ function ProfileSection() {
       </CardHeader>
       <CardContent>
         <div className="flex items-center gap-4 border-b border-slate-100 pb-6 dark:border-slate-800">
-          <Avatar name={user.name} email={user.email} avatarUrl={user.avatarUrl} size="lg" />
+          <div className="relative shrink-0">
+            <Avatar
+              name={user.name}
+              email={user.email}
+              avatarUrl={user.avatarUrl}
+              avatarPreset={user.avatarPreset}
+              size="lg"
+            />
+            <button
+              type="button"
+              onClick={() => setAvatarPickerOpen(true)}
+              aria-label="Change avatar"
+              className="absolute -bottom-1 -right-1 flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-2 border-white bg-slate-900 text-white shadow-sm transition-colors duration-150 hover:bg-slate-700 dark:border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-white"
+            >
+              <Pencil className="h-3 w-3" aria-hidden="true" />
+            </button>
+          </div>
           <div className="min-w-0">
             <p className="truncate text-base font-semibold text-slate-900 dark:text-white">
               {user.name || 'Unnamed'}
@@ -268,6 +287,8 @@ function ProfileSection() {
           </Button>
         </form>
       </CardContent>
+
+      <AvatarPickerDialog open={avatarPickerOpen} onClose={() => setAvatarPickerOpen(false)} />
     </Card>
   );
 }

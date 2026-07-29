@@ -5,6 +5,7 @@ import type {
   UpdateThemeInput,
   DeleteAccountInput,
   SetUsernameInput,
+  SetAvatarPresetInput,
   GoogleLoginInput,
 } from '@pindrop/shared';
 import * as settingsService from './settings.service.js';
@@ -32,6 +33,17 @@ export async function updateThemeHandler(req: Request, res: Response) {
 export async function setUsernameHandler(req: Request, res: Response) {
   const input = req.validated.body as SetUsernameInput;
   const user = await settingsService.setUsername(req.user!.id, input);
+  res.json({ user });
+}
+
+export async function setAvatarPresetHandler(req: Request, res: Response) {
+  const input = req.validated.body as SetAvatarPresetInput;
+  const user = await settingsService.setAvatarPreset(req.user!.id, input);
+  res.json({ user });
+}
+
+export async function clearAvatarPresetHandler(req: Request, res: Response) {
+  const user = await settingsService.clearAvatarPreset(req.user!.id);
   res.json({ user });
 }
 

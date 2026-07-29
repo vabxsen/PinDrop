@@ -5,6 +5,7 @@ import {
   updateThemeSchema,
   deleteAccountSchema,
   setUsernameSchema,
+  setAvatarPresetSchema,
   googleLoginSchema,
 } from '@pindrop/shared';
 import { validate } from '../../middleware/validate.middleware.js';
@@ -31,6 +32,12 @@ settingsRoutes.patch(
   validate(setUsernameSchema),
   settingsController.setUsernameHandler,
 );
+settingsRoutes.patch(
+  '/avatar',
+  validate(setAvatarPresetSchema),
+  settingsController.setAvatarPresetHandler,
+);
+settingsRoutes.delete('/avatar', settingsController.clearAvatarPresetHandler);
 settingsRoutes.patch('/google', validate(googleLoginSchema), settingsController.linkGoogleHandler);
 settingsRoutes.delete('/google', settingsController.unlinkGoogleHandler);
 settingsRoutes.delete(

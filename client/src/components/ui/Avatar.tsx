@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import type { AvatarPreset } from '@pindrop/shared';
 import { cn } from '@/lib/cn';
+import { AVATAR_PRESET_COLORS, AVATAR_PRESET_ICONS } from '@/lib/avatarPresets';
 
 const AVATAR_COLORS = [
   'bg-red-500',
@@ -27,17 +29,41 @@ const sizeClasses = {
   lg: 'h-14 w-14 text-xl',
 };
 
+const presetIconSizeClasses = {
+  sm: 'h-4 w-4',
+  md: 'h-5 w-5',
+  lg: 'h-7 w-7',
+};
+
 interface AvatarProps {
   name?: string | null;
   email: string;
   avatarUrl?: string | null;
+  avatarPreset?: AvatarPreset | null;
   size?: keyof typeof sizeClasses;
   className?: string;
 }
 
-export function Avatar({ name, email, avatarUrl, size = 'sm', className }: AvatarProps) {
+export function Avatar({ name, email, avatarUrl, avatarPreset, size = 'sm', className }: AvatarProps) {
   const [imgFailed, setImgFailed] = useState(false);
-  const initial = (name?.trim()?.[0] ?? email[0] ?? '?').toUpperCase();
+
+  // A user's explicit preset choice wins over an auto-synced Google photo.
+  if (avatarPreset) {
+    const Icon = AVATAR_PRESET_ICONS[avatarPreset];
+    return (
+      <div
+        className={cn(
+          'flex shrink-0 items-center justify-center rounded-full text-white',
+          sizeClasses[size],
+          AVATAR_PRESET_COLORS[avatarPreset],
+          className,
+        )}
+        aria-hidden="true"
+      >
+        <Icon className={presetIconSizeClasses[size]} />
+      </div>
+    );
+  }
 
   if (avatarUrl && !imgFailed) {
     return (
@@ -50,6 +76,8 @@ export function Avatar({ name, email, avatarUrl, size = 'sm', className }: Avata
       />
     );
   }
+
+  const initial = (name?.trim()?.[0] ?? email[0] ?? '?').toUpperCase();
 
   return (
     <div
