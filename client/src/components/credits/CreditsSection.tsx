@@ -11,7 +11,7 @@ export function CreditsSection() {
   return (
     <section
       aria-labelledby="credits-heading"
-      className="relative w-full overflow-hidden rounded-[28px] bg-[#020202] px-6 py-20 sm:px-10 sm:py-28"
+      className="relative w-full overflow-hidden rounded-[28px] border border-slate-200 bg-white px-6 py-20 sm:px-10 sm:py-28 dark:border-transparent dark:bg-[#020202]"
     >
       <motion.div
         variants={staggerContainer(0.12)}
@@ -26,7 +26,7 @@ export function CreditsSection() {
           whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, amount: 0.8 }}
           transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
-          className="text-xs font-medium uppercase tracking-[0.35em] text-neutral-500"
+          className="text-xs font-medium uppercase tracking-[0.35em] text-slate-500 dark:text-neutral-500"
         >
           Credits
         </motion.h2>
@@ -37,10 +37,10 @@ export function CreditsSection() {
         <GitHubCard />
 
         <motion.div variants={fadeUpVariants(reduceMotion, 10)} className="flex flex-col items-center gap-4 pt-4">
-          <p className="text-xs text-neutral-600">
+          <p className="text-xs text-slate-500 dark:text-neutral-600">
             <span aria-hidden="true">🇮🇳</span> Made in India
           </p>
-          <p className="text-[11px] text-neutral-700">
+          <p className="text-[11px] text-slate-400 dark:text-neutral-700">
             &copy; {new Date().getFullYear()} PinDrop. All rights reserved.
           </p>
         </motion.div>

@@ -67,7 +67,7 @@ export function TechStackGrid() {
     >
       <motion.p
         variants={fadeUpVariants(reduceMotion, 12)}
-        className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-neutral-500"
+        className="mb-6 text-xs font-medium uppercase tracking-[0.2em] text-slate-500 dark:text-neutral-500"
       >
         Technology Stack
       </motion.p>
