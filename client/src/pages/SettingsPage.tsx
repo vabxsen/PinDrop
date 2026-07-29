@@ -703,7 +703,7 @@ export function SettingsPage() {
       <div className="flex flex-col gap-6 sm:flex-row sm:gap-8">
         <nav
           aria-label="Settings sections"
-          className="flex gap-1 overflow-x-auto pb-1 sm:w-52 sm:shrink-0 sm:flex-col sm:overflow-visible sm:border-r sm:border-slate-200 sm:pb-0 sm:pr-4 dark:sm:border-slate-800"
+          className="flex w-full flex-col gap-1 sm:w-52 sm:shrink-0 sm:border-r sm:border-slate-200 sm:pr-4 dark:sm:border-slate-800"
         >
           {TABS.map((tab) => {
             const active = activeTab === tab.key;
@@ -715,7 +715,7 @@ export function SettingsPage() {
                 onClick={() => setSearchParams({ tab: tab.key })}
                 aria-current={active ? 'page' : undefined}
                 className={cn(
-                  'flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors duration-150 sm:w-full',
+                  'flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium transition-colors duration-150',
                   active
                     ? 'bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-300'
                     : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800',
