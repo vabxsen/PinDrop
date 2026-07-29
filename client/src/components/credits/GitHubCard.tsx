@@ -1,39 +1,31 @@
 import { ArrowUpRight } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
-import { EASE_SMOOTH, fadeUpVariants } from './motion';
 import { GitHubLogo } from './logos';
 
 const REPO_URL = 'https://github.com/vabxsen/PinDrop';
 
 export function GitHubCard() {
-  const reduceMotion = useReducedMotion() ?? false;
-
   return (
-    <motion.a
+    <a
       href={REPO_URL}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Open the PinDrop repository on GitHub (opens in a new tab)"
-      variants={fadeUpVariants(reduceMotion)}
-      whileHover={reduceMotion ? undefined : { y: -3 }}
-      whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-      transition={{ duration: 0.3, ease: EASE_SMOOTH }}
-      className="group flex w-full max-w-md cursor-pointer items-center gap-4 rounded-[24px] border border-slate-200 bg-slate-50 px-7 py-6 text-left transition-[border-color,box-shadow] duration-300 hover:border-slate-300 hover:shadow-[0_20px_60px_-30px_rgba(0,0,0,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-900/40 dark:border-white/10 dark:bg-white/[0.03] dark:backdrop-blur-xl dark:hover:border-white/25 dark:hover:shadow-[0_20px_60px_-30px_rgba(0,0,0,0.85)] dark:focus-visible:outline-white/40"
+      className="group flex items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-colors duration-150 hover:border-brand-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-500/50"
     >
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-900 transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:rotate-[8deg] dark:border-white/10 dark:text-white">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-900 dark:border-slate-700 dark:text-white">
         <GitHubLogo className="h-5 w-5" />
       </span>
 
       <span className="min-w-0 flex-1">
         <span className="block text-sm font-medium text-slate-900 dark:text-white">PinDrop</span>
-        <span className="mt-0.5 block text-xs text-slate-500 dark:text-neutral-500">
+        <span className="mt-0.5 block text-xs text-slate-500 dark:text-slate-400">
           Explore the source code, contribute, or report issues.
         </span>
       </span>
 
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center text-slate-400 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:translate-x-1 group-hover:text-slate-900 dark:text-neutral-500 dark:group-hover:text-white">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center text-slate-400 transition-all duration-150 group-hover:translate-x-0.5 group-hover:text-brand-600 dark:text-slate-500 dark:group-hover:text-brand-400">
         <ArrowUpRight className="h-4 w-4" strokeWidth={1.8} aria-hidden="true" />
       </span>
-    </motion.a>
+    </a>
   );
 }
