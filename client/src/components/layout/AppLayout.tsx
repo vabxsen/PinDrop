@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { Home } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { AccountMenu } from '@/components/layout/AccountMenu';
 import { useAuth } from '@/lib/auth-context';
 import { cn } from '@/lib/cn';
 
@@ -112,14 +114,12 @@ export function AppLayout() {
     }
   }
 
-  const initial = (user?.name?.[0] ?? user?.email[0] ?? '?').toUpperCase();
-
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col border-r border-slate-200 bg-white px-4 py-6 lg:flex dark:border-slate-800 dark:bg-slate-900">
-        <div className="px-2 text-brand-600">
+        <Link to="/" className="px-2 text-brand-600">
           <Logo />
-        </div>
+        </Link>
         <div className="mt-8 flex-1">
           <NavItems />
         </div>
@@ -156,9 +156,9 @@ export function AppLayout() {
             onClick={() => setMobileOpen(false)}
           />
           <div className="relative flex h-full w-64 flex-col bg-white px-4 py-6 dark:bg-slate-900">
-            <div className="px-2 text-brand-600">
+            <Link to="/" className="px-2 text-brand-600" onClick={() => setMobileOpen(false)}>
               <Logo />
-            </div>
+            </Link>
             <div className="mt-8 flex-1">
               <NavItems onNavigate={() => setMobileOpen(false)} />
             </div>
@@ -175,31 +175,38 @@ export function AppLayout() {
 
       <div className="lg:pl-64">
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-slate-200 bg-white/80 px-4 backdrop-blur-lg sm:px-6 dark:border-slate-800 dark:bg-slate-950/80">
-          <button
-            type="button"
-            className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-slate-600 lg:hidden dark:text-slate-300"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Open menu"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="h-6 w-6"
-              aria-hidden="true"
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-slate-600 lg:hidden dark:text-slate-300"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <span className="hidden text-sm font-medium text-slate-500 lg:inline dark:text-slate-400">
-            {user?.email}
-          </span>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                className="h-6 w-6"
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <Link
+              to="/"
+              className="flex items-center gap-2 rounded-lg px-2.5 py-2 text-sm font-medium text-slate-600 transition-colors duration-150 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+            >
+              <Home className="h-4 w-4" aria-hidden="true" />
+              <span className="hidden sm:inline">Home</span>
+            </Link>
+          </div>
           <div className="flex items-center gap-3">
+            <span className="hidden text-sm font-medium text-slate-500 lg:inline dark:text-slate-400">
+              {user?.email}
+            </span>
             <ThemeToggle />
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-600 text-sm font-semibold text-white">
-              {initial}
-            </div>
+            <AccountMenu />
           </div>
         </header>
 

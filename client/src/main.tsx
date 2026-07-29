@@ -8,6 +8,13 @@ import './index.css';
 import App from './App.tsx';
 import { AuthProvider } from '@/lib/auth-context';
 import { SocketProvider } from '@/lib/socket-context';
+import { applyAccent, applyTheme, getStoredAccent, getStoredTheme } from '@/lib/theme';
+
+// Applied before the first paint (not inside a component effect) so the stored
+// theme/accent are in place before React ever renders, avoiding a flash of the
+// default light/violet look on reload.
+applyTheme(getStoredTheme());
+applyAccent(getStoredAccent());
 
 const queryClient = new QueryClient({
   defaultOptions: {

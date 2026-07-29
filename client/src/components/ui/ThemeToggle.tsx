@@ -1,21 +1,16 @@
-import { useEffect, useState } from 'react';
-import { applyTheme, getStoredTheme } from '@/lib/theme';
+import { applyTheme, useIsDark } from '@/lib/theme';
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState(getStoredTheme);
-
-  useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
+  const isDark = useIsDark();
 
   return (
     <button
       type="button"
-      onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
-      aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      onClick={() => applyTheme(isDark ? 'light' : 'dark')}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
       className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-slate-500 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100"
     >
-      {theme === 'dark' ? (
+      {isDark ? (
         <svg
           className="h-5 w-5"
           viewBox="0 0 24 24"

@@ -2,20 +2,31 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   updateProfileSchema,
   changePasswordSchema,
   type UpdateProfileInput,
   type ChangePasswordInput,
+  type Theme,
 } from '@pindrop/shared';
 import { z } from 'zod';
+import { Check, Monitor, Moon, Sun } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
 import { settingsApi, ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
+import { cn } from '@/lib/cn';
+import {
+  ACCENT_PRESETS,
+  applyAccent,
+  applyTheme,
+  getStoredAccent,
+  getStoredTheme,
+  type ThemePreference,
+} from '@/lib/theme';
 
 function ProfileSection() {
   const { user, setUser } = useAuth();
@@ -200,16 +211,177 @@ function DangerZoneSection() {
   );
 }
 
+const THEME_OPTIONS: { value: ThemePreference; label: string; icon: typeof Sun }[] = [
+  { value: 'light', label: 'Light', icon: Sun },
+  { value: 'dark', label: 'Dark', icon: Moon },
+  { value: 'system', label: 'System', icon: Monitor },
+];
+
+function AppearanceSection() {
+  const { setUser } = useAuth();
+  const [theme, setTheme] = useState<ThemePreference>(getStoredTheme);
+  const [accent, setAccent] = useState(getStoredAccent);
+
+  function chooseTheme(next: ThemePreference) {
+    applyTheme(next);
+    setTheme(next);
+    settingsApi
+      .updateTheme(next.toUpperCase() as Theme)
+      .then((result) => setUser(result.user))
+      .catch(() => {
+        // Best-effort account sync; the local preference above already took effect.
+      });
+  }
+
+  function chooseAccent(key: string) {
+    applyAccent(key);
+    setAccent(key);
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Appearance</CardTitle>
+        <CardDescription>Customize how PinDrop looks on this device.</CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-6">
+        <div>
+          <p className="mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">Theme</p>
+          <div className="flex flex-wrap gap-2">
+            {THEME_OPTIONS.map(({ value, label, icon: Icon }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => chooseTheme(value)}
+                aria-pressed={theme === value}
+                className={cn(
+                  'flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition-colors duration-150',
+                  theme === value
+                    ? 'border-brand-600 bg-brand-50 text-brand-700 dark:border-brand-400 dark:bg-brand-500/15 dark:text-brand-300'
+                    : 'border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-800',
+                )}
+              >
+                <Icon className="h-4 w-4" aria-hidden="true" />
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <p className="mb-3 text-sm font-medium text-slate-700 dark:text-slate-300">
+            Accent color
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {ACCENT_PRESETS.map((preset) => (
+              <button
+                key={preset.key}
+                type="button"
+                onClick={() => chooseAccent(preset.key)}
+                aria-label={preset.label}
+                aria-pressed={accent === preset.key}
+                title={preset.label}
+                className={cn(
+                  'flex h-10 w-10 items-center justify-center rounded-full ring-2 ring-offset-2 ring-offset-white transition-shadow duration-150 dark:ring-offset-slate-900',
+                  accent === preset.key ? 'ring-slate-900 dark:ring-white' : 'ring-transparent',
+                )}
+                style={{ backgroundColor: preset.swatch }}
+              >
+                {accent === preset.key && (
+                  <Check className="h-4 w-4 text-white" aria-hidden="true" />
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+const CREDITS = [
+  { name: 'React', role: 'UI library' },
+  { name: 'Vite', role: 'Build tooling' },
+  { name: 'Tailwind CSS', role: 'Styling' },
+  { name: 'Express & Prisma', role: 'API & database' },
+  { name: 'Socket.IO', role: 'Realtime location updates' },
+  { name: 'Leaflet & OpenStreetMap', role: 'Maps' },
+];
+
+function CreditsSection() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Credits</CardTitle>
+        <CardDescription>PinDrop is built with these open-source projects.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ul className="flex flex-col divide-y divide-slate-100 dark:divide-slate-800">
+          {CREDITS.map((c) => (
+            <li key={c.name} className="flex items-center justify-between py-3 text-sm">
+              <span className="font-medium text-slate-900 dark:text-slate-100">{c.name}</span>
+              <span className="text-slate-500 dark:text-slate-400">{c.role}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
+          Map data &copy; OpenStreetMap contributors. PinDrop v1.0.0.
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
+const TABS = [
+  { key: 'profile', label: 'Profile' },
+  { key: 'account', label: 'Account' },
+  { key: 'appearance', label: 'Appearance' },
+  { key: 'credits', label: 'Credits' },
+] as const;
+type TabKey = (typeof TABS)[number]['key'];
+
 export function SettingsPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedTab = searchParams.get('tab');
+  const activeTab: TabKey = TABS.some((t) => t.key === requestedTab)
+    ? (requestedTab as TabKey)
+    : 'profile';
+
   return (
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Settings</h1>
         <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Manage your account.</p>
       </div>
-      <ProfileSection />
-      <PasswordSection />
-      <DangerZoneSection />
+
+      <div className="flex gap-1 overflow-x-auto border-b border-slate-200 dark:border-slate-800">
+        {TABS.map((tab) => (
+          <button
+            key={tab.key}
+            type="button"
+            onClick={() => setSearchParams({ tab: tab.key })}
+            aria-current={activeTab === tab.key}
+            className={cn(
+              'whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition-colors duration-150',
+              activeTab === tab.key
+                ? 'border-brand-600 text-brand-700 dark:border-brand-400 dark:text-brand-300'
+                : 'border-transparent text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100',
+            )}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === 'profile' && <ProfileSection />}
+      {activeTab === 'account' && (
+        <>
+          <PasswordSection />
+          <DangerZoneSection />
+        </>
+      )}
+      {activeTab === 'appearance' && <AppearanceSection />}
+      {activeTab === 'credits' && <CreditsSection />}
     </div>
   );
 }
