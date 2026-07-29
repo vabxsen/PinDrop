@@ -19,6 +19,7 @@ import { Dialog } from '@/components/ui/Dialog';
 import { settingsApi, ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import { cn } from '@/lib/cn';
+import { CreditsSection } from '@/components/credits/CreditsSection';
 import {
   ACCENT_PRESETS,
   applyAccent,
@@ -297,39 +298,6 @@ function AppearanceSection() {
             ))}
           </div>
         </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-const CREDITS = [
-  { name: 'React', role: 'UI library' },
-  { name: 'Vite', role: 'Build tooling' },
-  { name: 'Tailwind CSS', role: 'Styling' },
-  { name: 'Express & Prisma', role: 'API & database' },
-  { name: 'Socket.IO', role: 'Realtime location updates' },
-  { name: 'Leaflet & OpenStreetMap', role: 'Maps' },
-];
-
-function CreditsSection() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Credits</CardTitle>
-        <CardDescription>PinDrop is built with these open-source projects.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ul className="flex flex-col divide-y divide-slate-100 dark:divide-slate-800">
-          {CREDITS.map((c) => (
-            <li key={c.name} className="flex items-center justify-between py-3 text-sm">
-              <span className="font-medium text-slate-900 dark:text-slate-100">{c.name}</span>
-              <span className="text-slate-500 dark:text-slate-400">{c.role}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
-          Map data &copy; OpenStreetMap contributors. PinDrop v1.0.0.
-        </p>
       </CardContent>
     </Card>
   );
