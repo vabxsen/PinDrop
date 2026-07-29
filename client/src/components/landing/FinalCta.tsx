@@ -1,9 +1,6 @@
 import { motion } from 'framer-motion';
-import { NavLink } from 'react-router-dom';
-import { buttonVariants } from '@/components/ui/Button';
+import { PrimaryCta } from './PrimaryCta';
 import { fadeUp, viewportOnce } from './motion';
-
-const ctaHover = 'transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]';
 
 export function FinalCta() {
   return (
@@ -19,9 +16,7 @@ export function FinalCta() {
           Create your first PinDrop.
         </h2>
         <div className="mt-10">
-          <NavLink to="/signup" className={buttonVariants('primary', 'md', ctaHover)}>
-            Get started free
-          </NavLink>
+          <PrimaryCta />
         </div>
       </motion.div>
     </section>

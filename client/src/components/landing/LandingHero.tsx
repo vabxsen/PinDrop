@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
-import { NavLink } from 'react-router-dom';
 import { buttonVariants } from '@/components/ui/Button';
 import { DashboardMockup } from './DashboardMockup';
+import { PrimaryCta } from './PrimaryCta';
 import { fadeUp, scaleIn, sectionEase } from './motion';
 
 const ctaHover = 'transition-transform duration-200 hover:scale-[1.02] active:scale-[0.98]';
@@ -28,9 +28,7 @@ export function LandingHero() {
           yes — never before.
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <NavLink to="/signup" className={buttonVariants('primary', 'md', ctaHover)}>
-            Get started free
-          </NavLink>
+          <PrimaryCta />
           <a href="#how-it-works" className={buttonVariants('outline', 'md', ctaHover)}>
             See how it works
           </a>
