@@ -102,15 +102,22 @@ export async function googleLogin(
     user = existingByEmail
       ? await prisma.user.update({
           where: { id: existingByEmail.id },
-          data: { googleId: payload.sub },
+          data: { googleId: payload.sub, avatarUrl: payload.picture ?? existingByEmail.avatarUrl },
         })
       : await prisma.user.create({
           data: {
             email: payload.email,
             name: payload.name ?? null,
             googleId: payload.sub,
+            avatarUrl: payload.picture ?? null,
           },
         });
+  } else if (payload.picture && payload.picture !== user.avatarUrl) {
+    // Google's photo URL can change (new profile picture); keep it fresh on every login.
+    user = await prisma.user.update({
+      where: { id: user.id },
+      data: { avatarUrl: payload.picture },
+    });
   }
 
   const tokens = await issueTokens(user.id, user.email, false, meta);

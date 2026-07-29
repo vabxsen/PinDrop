@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { cn } from '@/lib/cn';
 
 const AVATAR_COLORS = [
@@ -29,12 +30,26 @@ const sizeClasses = {
 interface AvatarProps {
   name?: string | null;
   email: string;
+  avatarUrl?: string | null;
   size?: keyof typeof sizeClasses;
   className?: string;
 }
 
-export function Avatar({ name, email, size = 'sm', className }: AvatarProps) {
+export function Avatar({ name, email, avatarUrl, size = 'sm', className }: AvatarProps) {
+  const [imgFailed, setImgFailed] = useState(false);
   const initial = (name?.trim()?.[0] ?? email[0] ?? '?').toUpperCase();
+
+  if (avatarUrl && !imgFailed) {
+    return (
+      <img
+        src={avatarUrl}
+        alt=""
+        referrerPolicy="no-referrer"
+        onError={() => setImgFailed(true)}
+        className={cn('shrink-0 rounded-full object-cover', sizeClasses[size], className)}
+      />
+    );
+  }
 
   return (
     <div

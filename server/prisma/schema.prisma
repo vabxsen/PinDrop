@@ -32,6 +32,7 @@ model User {
   passwordHash        String?
   googleId            String?              @unique
   name                String?
+  avatarUrl           String?
   theme               Theme                @default(SYSTEM)
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt

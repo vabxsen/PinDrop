@@ -6,6 +6,7 @@ export function toUserDTO(user: User): UserDTO {
     id: user.id,
     email: user.email,
     name: user.name,
+    avatarUrl: user.avatarUrl,
     theme: user.theme,
     hasPassword: user.passwordHash !== null,
     createdAt: user.createdAt.toISOString(),
