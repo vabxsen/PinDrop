@@ -1,17 +1,19 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
-import { Clock, Link2, MapPin, XCircle } from 'lucide-react';
+import { Clock, Link2, MapPin, Plus, XCircle } from 'lucide-react';
 import { dashboardApi } from '@/lib/api';
 import { useSocketEvent } from '@/lib/socket-context';
 import { useAuth } from '@/lib/auth-context';
 import { StatTile } from '@/components/ui/StatTile';
 import { LiveStatusDot } from '@/components/ui/LiveStatusDot';
+import { Button } from '@/components/ui/Button';
 import { DailyLocationsChart } from '@/components/dashboard/DailyLocationsChart';
 import { TopCountriesChart } from '@/components/dashboard/TopCountriesChart';
 import { AcceptanceRateChart } from '@/components/dashboard/AcceptanceRateChart';
 import { ActivityFeed } from '@/components/dashboard/ActivityFeed';
 import { Spinner } from '@/components/ui/Spinner';
+import { LinkFormDialog } from '@/components/links/LinkFormDialog';
 
 interface LocationReceivedPayload {
   linkId: string;
@@ -25,10 +27,18 @@ interface PermissionDeniedPayload {
 export function DashboardPage() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const [createOpen, setCreateOpen] = useState(false);
 
   const invalidateAll = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ['dashboard'] });
   }, [queryClient]);
+
+  function handleLinkCreated() {
+    invalidateAll();
+    // The Links page shares this query key; keep it fresh too so a visit
+    // right after creating doesn't show stale data.
+    queryClient.invalidateQueries({ queryKey: ['links'] });
+  }
 
   useSocketEvent<LocationReceivedPayload>('location:received', (payload) => {
     toast.success(`New location from "${payload.linkTitle}"`);
@@ -86,7 +96,12 @@ export function DashboardPage() {
             A live overview of your links and their responses.
           </p>
         </div>
-        <LiveStatusDot />
+        <div className="flex items-center gap-3">
+          <LiveStatusDot />
+          <Button onClick={() => setCreateOpen(true)} icon={<Plus className="h-4.5 w-4.5" aria-hidden="true" />}>
+            Create link
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -124,6 +139,12 @@ export function DashboardPage() {
       </div>
 
       <ActivityFeed items={activity.data?.items ?? []} />
+
+      <LinkFormDialog
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        onSaved={handleLinkCreated}
+      />
     </div>
   );
 }
