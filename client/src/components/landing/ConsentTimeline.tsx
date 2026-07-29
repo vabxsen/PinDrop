@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Link2, MapPin, MousePointerClick, Share2, ShieldQuestion } from 'lucide-react';
 import { fadeUp, staggerContainer, viewportOnce } from './motion';
 
@@ -23,6 +23,8 @@ const steps = [
 ];
 
 export function ConsentTimeline() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section id="how-it-works" className="mx-auto max-w-6xl px-6 py-28 sm:px-8 sm:py-36">
       <motion.div
@@ -76,9 +78,14 @@ export function ConsentTimeline() {
             <motion.div
               key={step.title}
               variants={fadeUp}
-              className="relative flex items-start gap-4 lg:flex-col lg:items-center lg:gap-0 lg:text-center"
+              whileHover={
+                reduceMotion
+                  ? undefined
+                  : { y: -6, transition: { type: 'spring', stiffness: 400, damping: 22 } }
+              }
+              className="group relative flex cursor-default items-start gap-4 lg:flex-col lg:items-center lg:gap-0 lg:text-center"
             >
-              <span className="z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-brand-400">
+              <span className="z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-brand-600 transition-colors duration-200 group-hover:border-brand-400 group-hover:bg-brand-50 dark:border-slate-700 dark:bg-slate-950 dark:text-brand-400 dark:group-hover:border-brand-500 dark:group-hover:bg-brand-500/10">
                 <step.icon className="h-4.5 w-4.5" />
               </span>
               <div className="lg:mt-4 lg:max-w-[10.5rem]">
