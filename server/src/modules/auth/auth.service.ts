@@ -173,7 +173,9 @@ export async function forgotPassword(email: string, appBaseUrl: string): Promise
     },
   });
 
-  const resetUrl = `${appBaseUrl}/reset-password/${rawToken}`;
+  // ResetPasswordPage reads the token from a query param, not a route segment
+  // (there's no /reset-password/:token route), so it must be passed as one here.
+  const resetUrl = `${appBaseUrl}/reset-password?token=${encodeURIComponent(rawToken)}`;
   await sendPasswordResetEmail(user.email, resetUrl);
 }
 

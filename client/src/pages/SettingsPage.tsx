@@ -150,7 +150,7 @@ function PasswordSection() {
 const deleteFormSchema = z.object({ password: z.string().optional().default('') });
 
 function DangerZoneSection() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const hasPassword = user?.hasPassword ?? true;
   const [confirmOpen, setConfirmOpen] = useState(false);
   const navigate = useNavigate();
@@ -165,6 +165,9 @@ function DangerZoneSection() {
 
   async function onDelete(data: { password: string }) {
     await settingsApi.deleteAccount(data.password);
+    // The account (and its refresh tokens) are already gone server-side; this just
+    // clears the client's in-memory session so the header stops showing as logged in.
+    await logout();
     toast.success('Account deleted');
     navigate('/', { replace: true });
   }
