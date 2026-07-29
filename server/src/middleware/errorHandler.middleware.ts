@@ -43,6 +43,21 @@ export function errorHandler(err: unknown, req: Request, res: Response, _next: N
     return;
   }
 
+  // Third-party middleware (e.g. csrf-csrf) throws plain `http-errors` instances
+  // rather than our own HttpError, but they carry the same shape.
+  if (
+    typeof err === 'object' &&
+    err !== null &&
+    'statusCode' in err &&
+    typeof (err as { statusCode: unknown }).statusCode === 'number'
+  ) {
+    const status = (err as { statusCode: number }).statusCode;
+    const message = err instanceof Error ? err.message : 'Request failed';
+    if (status >= 500) logger.error({ err }, message);
+    res.status(status).json({ message });
+    return;
+  }
+
   logger.error({ err }, 'Unhandled error');
   res.status(500).json({ message: 'Internal server error' });
 }

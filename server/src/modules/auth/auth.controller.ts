@@ -21,6 +21,9 @@ function requestMeta(req: Request) {
   };
 }
 
+// Client and API are served from the same origin in production (Firebase Hosting
+// rewrites /api/** and /socket.io/** to this Cloud Run service), so this cookie
+// is always same-site and Lax is both sufficient and the more secure choice.
 function setRefreshCookie(res: Response, token: string, expiresAt: Date) {
   res.cookie(REFRESH_TOKEN_COOKIE_NAME, token, {
     httpOnly: true,

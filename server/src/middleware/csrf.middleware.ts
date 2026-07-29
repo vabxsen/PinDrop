@@ -10,10 +10,13 @@ import { env, isProd } from '../config/env.js';
 // binding it to the refresh token would make the HMAC computed at generation time
 // (before the browser has echoed back a freshly-rotated cookie) disagree with the HMAC
 // recomputed at validation time on the *next* request, breaking every refresh. Security
-// still comes from the double-submit itself (cookie value must match the header value,
-// and a cross-origin attacker cannot read the victim's cookie to forge that header) plus
-// SameSite=Lax, which already stops the cookie from being sent on a forged cross-site
-// POST in modern browsers.
+// comes from the double-submit itself: a forging page can trigger a cross-site request
+// that carries the cookie, but it cannot *read* the victim's cookie value (blocked by
+// the browser's same-origin policy) to also set a matching x-csrf-token header, so the
+// forged request fails validation regardless of SameSite. Client and API are same-origin
+// in production (Firebase Hosting rewrites /api/** to this Cloud Run service), so Lax
+// is used everywhere — see setRefreshCookie in auth.controller.ts for the matching
+// refresh-token cookie.
 //
 // The CSRF cookie is intentionally NOT httpOnly: same-origin JS reads its value
 // directly and mirrors it into the x-csrf-token header. That's what lets a returning
