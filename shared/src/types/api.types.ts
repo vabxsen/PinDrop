@@ -8,6 +8,7 @@ export interface UserDTO {
   username: string | null;
   theme: Theme;
   hasPassword: boolean;
+  hasGoogleAccount: boolean;
   createdAt: string;
 }
 

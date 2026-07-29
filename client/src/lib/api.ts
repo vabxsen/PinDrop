@@ -245,6 +245,9 @@ export const settingsApi = {
     apiRequest<{ user: UserDTO }>('/api/settings/theme', { method: 'PATCH', body: { theme } }),
   setUsername: (username: string) =>
     apiRequest<{ user: UserDTO }>('/api/settings/username', { method: 'PATCH', body: { username } }),
+  linkGoogle: (idToken: string) =>
+    apiRequest<{ user: UserDTO }>('/api/settings/google', { method: 'PATCH', body: { idToken } }),
+  unlinkGoogle: () => apiRequest<{ user: UserDTO }>('/api/settings/google', { method: 'DELETE' }),
   deleteAccount: (password: string) =>
     apiRequest<void>('/api/settings/account', { method: 'DELETE', body: { password } }),
 };

@@ -5,6 +5,7 @@ import {
   updateThemeSchema,
   deleteAccountSchema,
   setUsernameSchema,
+  googleLoginSchema,
 } from '@pindrop/shared';
 import { validate } from '../../middleware/validate.middleware.js';
 import { requireAuth } from '../../middleware/auth.middleware.js';
@@ -30,6 +31,8 @@ settingsRoutes.patch(
   validate(setUsernameSchema),
   settingsController.setUsernameHandler,
 );
+settingsRoutes.patch('/google', validate(googleLoginSchema), settingsController.linkGoogleHandler);
+settingsRoutes.delete('/google', settingsController.unlinkGoogleHandler);
 settingsRoutes.delete(
   '/account',
   validate(deleteAccountSchema),

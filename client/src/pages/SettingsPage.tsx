@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import toast from 'react-hot-toast';
@@ -24,14 +24,172 @@ import { settingsApi, ApiError } from '@/lib/api';
 import { useAuth } from '@/lib/auth-context';
 import { cn } from '@/lib/cn';
 import { CreditsSection } from '@/components/credits/CreditsSection';
+import { loadGoogleScript } from '@/lib/google';
 import {
   ACCENT_PRESETS,
   applyAccent,
   applyTheme,
   getStoredAccent,
   getStoredTheme,
+  useIsDark,
   type ThemePreference,
 } from '@/lib/theme';
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as string;
+
+function GoogleGIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
+      <path
+        fill="#FFC107"
+        d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+      />
+      <path
+        fill="#FF3D00"
+        d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+      />
+      <path
+        fill="#4CAF50"
+        d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+      />
+      <path
+        fill="#1976D2"
+        d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+      />
+    </svg>
+  );
+}
+
+function GoogleLinkButton() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { setUser } = useAuth();
+  const isDark = useIsDark();
+
+  useEffect(() => {
+    let cancelled = false;
+
+    loadGoogleScript()
+      .then(() => {
+        const container = containerRef.current;
+        if (cancelled || !container || !window.google) return;
+
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: (response) => {
+            settingsApi
+              .linkGoogle(response.credential)
+              .then((result) => {
+                setUser(result.user);
+                toast.success('Google account connected');
+              })
+              .catch((err: unknown) => {
+                toast.error(
+                  err instanceof ApiError ? err.message : 'Failed to connect Google account',
+                );
+              });
+          },
+        });
+
+        window.google.accounts.id.renderButton(container, {
+          type: 'standard',
+          theme: isDark ? 'filled_black' : 'outline',
+          size: 'medium',
+          text: 'signin_with',
+          shape: 'rectangular',
+          width: 170,
+        });
+      })
+      .catch(() => {
+        toast.error('Could not load Google Sign-In');
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [setUser, isDark]);
+
+  return <div ref={containerRef} />;
+}
+
+function ConnectedAccountsSection() {
+  const { user, setUser } = useAuth();
+  const [disconnectOpen, setDisconnectOpen] = useState(false);
+
+  if (!user) return null;
+
+  async function confirmDisconnect() {
+    try {
+      const result = await settingsApi.unlinkGoogle();
+      setUser(result.user);
+      toast.success('Google account disconnected');
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : 'Failed to disconnect Google account');
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Connected accounts</CardTitle>
+        <CardDescription>Sign-in methods linked to your account.</CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-col divide-y divide-slate-100 dark:divide-slate-800">
+        <div className="flex flex-wrap items-center justify-between gap-3 py-4 first:pt-0 last:pb-0">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 dark:border-slate-700">
+              <GoogleGIcon className="h-5 w-5" />
+            </span>
+            <div>
+              <p className="text-sm font-medium text-slate-900 dark:text-white">Google</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                {user.hasGoogleAccount ? 'Connected' : 'Not connected'}
+              </p>
+            </div>
+          </div>
+          {user.hasGoogleAccount ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setDisconnectOpen(true)}
+              disabled={!user.hasPassword}
+              title={
+                user.hasPassword ? undefined : 'Set a password before disconnecting Google'
+              }
+            >
+              Disconnect
+            </Button>
+          ) : (
+            <GoogleLinkButton />
+          )}
+        </div>
+
+        <div className="flex items-center justify-between gap-3 py-4 first:pt-0 last:pb-0">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 dark:border-slate-700 dark:text-slate-400">
+              <Lock className="h-4 w-4" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="text-sm font-medium text-slate-900 dark:text-white">Password</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                {user.hasPassword ? 'Password set' : 'No password set'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+
+      <ConfirmDialog
+        open={disconnectOpen}
+        onClose={() => setDisconnectOpen(false)}
+        onConfirm={confirmDisconnect}
+        title="Disconnect Google?"
+        description="You can reconnect anytime. You'll still be able to sign in with your password."
+        confirmLabel="Disconnect"
+      />
+    </Card>
+  );
+}
 
 function ProfileSection() {
   const { user, setUser } = useAuth();
@@ -472,6 +630,7 @@ export function SettingsPage() {
       )}
       {activeTab === 'account' && (
         <>
+          <ConnectedAccountsSection />
           <PasswordSection />
           <DangerZoneSection />
         </>

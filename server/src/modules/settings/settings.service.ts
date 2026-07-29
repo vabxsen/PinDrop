@@ -1,15 +1,19 @@
 import bcrypt from 'bcryptjs';
+import { OAuth2Client } from 'google-auth-library';
 import type {
   UpdateProfileInput,
   ChangePasswordInput,
   UpdateThemeInput,
   DeleteAccountInput,
   SetUsernameInput,
+  GoogleLoginInput,
 } from '@pindrop/shared';
 import { prisma } from '../../lib/prisma.js';
 import { env } from '../../config/env.js';
 import { conflict, unauthorized, notFound } from '../../lib/httpError.js';
 import { toUserDTO } from '../auth/auth.mapper.js';
+
+const googleClient = new OAuth2Client(env.GOOGLE_CLIENT_ID);
 
 export async function updateProfile(userId: string, input: UpdateProfileInput) {
   if (input.email) {
@@ -68,6 +72,44 @@ export async function setUsername(userId: string, input: SetUsernameInput) {
     where: { id: userId },
     data: { username: input.username },
   });
+  return toUserDTO(updated);
+}
+
+export async function linkGoogle(userId: string, input: GoogleLoginInput) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw notFound('User not found');
+  if (user.googleId) throw conflict('A Google account is already connected');
+
+  const ticket = await googleClient
+    .verifyIdToken({ idToken: input.idToken, audience: env.GOOGLE_CLIENT_ID })
+    .catch(() => null);
+  const payload = ticket?.getPayload();
+  if (!payload?.sub || !payload.email_verified) {
+    throw unauthorized('Invalid Google account');
+  }
+
+  const existing = await prisma.user.findUnique({ where: { googleId: payload.sub } });
+  if (existing) {
+    throw conflict('That Google account is already connected to a different PinDrop account');
+  }
+
+  const updated = await prisma.user.update({
+    where: { id: userId },
+    data: { googleId: payload.sub, avatarUrl: payload.picture ?? user.avatarUrl },
+  });
+  return toUserDTO(updated);
+}
+
+export async function unlinkGoogle(userId: string) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw notFound('User not found');
+  if (!user.googleId) throw conflict('No Google account is connected');
+  // Would otherwise strand the account with no way to sign back in.
+  if (!user.passwordHash) {
+    throw conflict('Set a password before disconnecting Google, so you can still sign in');
+  }
+
+  const updated = await prisma.user.update({ where: { id: userId }, data: { googleId: null } });
   return toUserDTO(updated);
 }
 

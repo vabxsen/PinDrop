@@ -10,6 +10,7 @@ export function toUserDTO(user: User): UserDTO {
     username: user.username,
     theme: user.theme,
     hasPassword: user.passwordHash !== null,
+    hasGoogleAccount: user.googleId !== null,
     createdAt: user.createdAt.toISOString(),
   };
 }
