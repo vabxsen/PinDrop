@@ -1,8 +1,9 @@
-import { Link, NavLink, Outlet } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { buttonVariants } from '@/components/ui/Button';
 import { useAuth } from '@/lib/auth-context';
+import { smoothScrollToId } from '@/lib/smoothScroll';
 
 const navLinks = [
   { to: '/#how-it-works', label: 'How it works' },
@@ -11,6 +12,14 @@ const navLinks = [
 
 export function PublicLayout() {
   const { status } = useAuth();
+  const location = useLocation();
+
+  function handleNavLinkClick(event: React.MouseEvent<HTMLAnchorElement>, to: string) {
+    const [path, hash] = to.split('#');
+    if (!hash || location.pathname !== (path || '/')) return;
+    event.preventDefault();
+    smoothScrollToId(hash);
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-white dark:bg-slate-950">
@@ -24,6 +33,7 @@ export function PublicLayout() {
               <a
                 key={link.to}
                 href={link.to}
+                onClick={(event) => handleNavLinkClick(event, link.to)}
                 className="text-sm font-medium text-slate-600 transition-colors duration-150 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
               >
                 {link.label}

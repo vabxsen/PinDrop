@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { buttonVariants } from '@/components/ui/Button';
+import { smoothScrollToId } from '@/lib/smoothScroll';
 import { DashboardMockup } from './DashboardMockup';
 import { PrimaryCta } from './PrimaryCta';
 import { fadeUp, scaleIn, sectionEase } from './motion';
@@ -29,7 +30,14 @@ export function LandingHero() {
         </p>
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <PrimaryCta />
-          <a href="#how-it-works" className={buttonVariants('outline', 'md', ctaHover)}>
+          <a
+            href="#how-it-works"
+            onClick={(event) => {
+              event.preventDefault();
+              smoothScrollToId('how-it-works');
+            }}
+            className={buttonVariants('outline', 'md', ctaHover)}
+          >
             See how it works
           </a>
         </div>
