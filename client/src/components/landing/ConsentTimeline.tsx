@@ -87,12 +87,12 @@ export function ConsentTimeline() {
             >
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute -inset-4 -z-10 rounded-2xl border border-transparent bg-white/0 opacity-0 backdrop-blur-none transition-all duration-300 ease-out group-hover:border-white/70 group-hover:bg-white/80 group-hover:opacity-100 group-hover:shadow-[0_8px_30px_-12px_rgba(15,23,42,0.15)] group-hover:backdrop-blur-md dark:group-hover:border-slate-700/60 dark:group-hover:bg-slate-900/60 dark:group-hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.5)]"
+                className="pointer-events-none absolute -inset-6 -z-10 rounded-2xl border border-transparent bg-white/0 opacity-0 backdrop-blur-none transition-all duration-300 ease-out group-hover:border-white/30 group-hover:bg-white/10 group-hover:opacity-100 group-hover:shadow-[0_8px_30px_-12px_rgba(15,23,42,0.15)] group-hover:backdrop-blur-xl dark:group-hover:border-white/10 dark:group-hover:bg-white/5 dark:group-hover:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.5)]"
               />
-              <span className="z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-brand-600 transition-all duration-300 ease-out group-hover:scale-[1.15] group-hover:border-brand-400 group-hover:bg-brand-50 dark:border-slate-700 dark:bg-slate-950 dark:text-brand-400 dark:group-hover:border-brand-500 dark:group-hover:bg-brand-500/10">
+              <span className="z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-brand-600 transition-all duration-300 ease-out group-hover:scale-150 group-hover:border-brand-400 group-hover:bg-brand-50 dark:border-slate-700 dark:bg-slate-950 dark:text-brand-400 dark:group-hover:border-brand-500 dark:group-hover:bg-brand-500/10">
                 <step.icon className="h-4.5 w-4.5" />
               </span>
-              <div className="z-10 transition-transform duration-300 ease-out group-hover:scale-110 lg:mt-4 lg:max-w-[10.5rem]">
+              <div className="z-10 transition-transform duration-300 ease-out group-hover:scale-150 lg:mt-4 lg:max-w-[10.5rem]">
                 <p className="font-medium text-slate-900 dark:text-slate-100">{step.title}</p>
                 <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   {step.description}
