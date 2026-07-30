@@ -34,7 +34,7 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
         <motion.div
           key="create-link-globe"
           aria-hidden="true"
-          className="pointer-events-none fixed inset-y-0 left-0 z-40 hidden overflow-hidden bg-black lg:right-[28rem] lg:block"
+          className="pointer-events-none fixed bottom-0 left-0 top-16 z-40 hidden items-center justify-center overflow-hidden bg-black lg:right-[28rem] lg:flex"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -46,7 +46,7 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
             muted
             playsInline
             preload="auto"
-            className="h-full w-full object-cover"
+            className="h-[24rem] w-[24rem] rounded-full object-cover shadow-[0_0_80px_rgba(100,73,255,0.25)]"
           >
             <source src="/earth.mp4" type="video/mp4" />
           </video>
@@ -62,7 +62,7 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
           animate={reduceMotion ? { opacity: 1 } : { x: '0%' }}
           exit={reduceMotion ? { opacity: 0 } : { x: '100%' }}
           transition={{ duration: 0.6, ease: sectionEase }}
-          className="dark fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col overflow-y-auto border-l border-white/10 bg-black shadow-2xl"
+          className="dark fixed bottom-0 right-0 top-16 z-40 flex w-full max-w-md flex-col overflow-y-auto border-l border-white/10 bg-black shadow-2xl"
         >
           <div
             aria-hidden="true"
