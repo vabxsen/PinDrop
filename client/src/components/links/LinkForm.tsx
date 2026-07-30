@@ -29,7 +29,7 @@ function toExpiresHours(iso: string | null): string {
 
 function formatExpiresLabel(hours: string | undefined): string {
   const n = Number(hours);
-  if (!n) return 'Never';
+  if (!n) return '';
   return `${n} ${n === 1 ? 'hour' : 'hours'}`;
 }
 
