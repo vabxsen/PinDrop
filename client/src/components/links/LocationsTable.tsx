@@ -37,11 +37,38 @@ export function LocationsTable({ items, onDelete }: LocationsTableProps) {
               <td className="px-4 py-3">
                 {item.permissionStatus === 'GRANTED' ? (
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-100">
-                      {item.displayAddress ??
-                        [item.city, item.country].filter(Boolean).join(', ') ??
-                        '—'}
-                    </p>
+                    <div className="flex items-center gap-1.5">
+                      <p className="font-medium text-slate-900 dark:text-slate-100">
+                        {item.displayAddress ??
+                          [item.city, item.country].filter(Boolean).join(', ') ??
+                          '—'}
+                      </p>
+                      {item.lat !== null && item.lng !== null && (
+                        <a
+                          href={`https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lng}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label="Open in Google Maps"
+                          className="shrink-0 rounded p-0.5 text-slate-400 transition-colors duration-150 hover:bg-slate-100 hover:text-brand-600 dark:hover:bg-slate-800 dark:hover:text-brand-400"
+                        >
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            className="h-3.5 w-3.5"
+                            aria-hidden="true"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                            />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 3h6v6M10 14 21 3" />
+                          </svg>
+                        </a>
+                      )}
+                    </div>
                     {item.lat !== null && item.lng !== null && (
                       <p className="text-xs text-slate-400">
                         {item.lat.toFixed(4)}, {item.lng.toFixed(4)}
@@ -61,31 +88,6 @@ export function LocationsTable({ items, onDelete }: LocationsTableProps) {
               </td>
               <td className="px-4 py-3">
                 <div className="flex items-center justify-end gap-1">
-                  {item.permissionStatus === 'GRANTED' && item.lat !== null && item.lng !== null && (
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lng}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Open in Google Maps"
-                      className="rounded-lg p-1.5 text-slate-400 transition-colors duration-150 hover:bg-slate-100 hover:text-brand-600 dark:hover:bg-slate-800 dark:hover:text-brand-400"
-                    >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        className="h-4 w-4"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-                        />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 3h6v6M10 14 21 3" />
-                      </svg>
-                    </a>
-                  )}
                   <button
                     type="button"
                     onClick={() => onDelete(item.id)}
