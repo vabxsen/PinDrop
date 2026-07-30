@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Link2, X } from 'lucide-react';
 import type { LinkDTO } from '@pindrop/shared';
 import { LinkForm } from '@/components/links/LinkForm';
+import { RotatingGlobe } from './RotatingGlobe';
 import { sectionEase } from './motion';
 
 interface CreateLinkPanelProps {
@@ -30,6 +31,19 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
 
   return createPortal(
     <AnimatePresence>
+      {open && (
+        <motion.div
+          key="create-link-globe"
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-y-0 left-0 z-40 hidden items-center justify-center overflow-hidden lg:right-[28rem] lg:flex"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.2 }}
+        >
+          <RotatingGlobe />
+        </motion.div>
+      )}
       {open && (
         <motion.div
           key="create-link-panel"

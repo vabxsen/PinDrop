@@ -421,3 +421,7 @@ function project([lat, lng]: [number, number]): [number, number] {
 }
 
 export const WORLD_DOTS: [number, number][] = RAW_POINTS.map(project);
+
+// Raw [lat, lng] pairs, kept for projections that aren't the flat
+// equirectangular map above (e.g. an orthographic globe).
+export const WORLD_LATLNG: [number, number][] = RAW_POINTS;

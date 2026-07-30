@@ -45,4 +45,17 @@
   .scrollbar-thin {
     scrollbar-width: thin;
   }
+
+  .animate-spin-globe {
+    animation: spin-globe 40s linear infinite;
+  }
+}
+
+@keyframes spin-globe {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
 }
