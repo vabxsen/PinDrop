@@ -57,7 +57,7 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
           <LinkVisitorPreview
             title={preview.title}
             description={preview.description}
-            className="relative h-full w-full max-w-md"
+            className="relative"
           />
         </motion.div>
       )}
