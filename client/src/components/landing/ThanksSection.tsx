@@ -19,9 +19,14 @@ export function ThanksSection() {
           height={160}
           className="h-40 w-40 shrink-0 object-contain"
         />
-        <h2 className="text-center text-4xl font-bold tracking-tight text-slate-900 sm:text-left sm:text-5xl dark:text-white">
-          Thanks for visiting.
-        </h2>
+        <div>
+          <h2 className="text-center text-4xl font-bold tracking-tight text-slate-900 sm:text-left sm:text-5xl dark:text-white">
+            Thanks for visiting.
+          </h2>
+          <p className="mt-2 text-center text-sm text-slate-500 sm:text-left dark:text-slate-400">
+            Hope you liked the service
+          </p>
+        </div>
       </motion.div>
     </section>
   );
