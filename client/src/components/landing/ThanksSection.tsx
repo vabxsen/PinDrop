@@ -23,7 +23,7 @@ export function ThanksSection() {
           <h2 className="text-center text-4xl font-bold tracking-tight text-slate-900 sm:text-left sm:text-5xl dark:text-white">
             Thanks for visiting.
           </h2>
-          <p className="mt-2 text-center text-sm font-bold text-slate-900 sm:text-left dark:text-white">
+          <p className="mt-2 text-center text-lg font-bold text-slate-900 sm:text-left dark:text-white">
             Hope you liked the service
           </p>
         </div>
