@@ -14,6 +14,7 @@ import { ShareLinkDialog } from '@/components/links/ShareLinkDialog';
 import { LocationsMap } from '@/components/links/LocationsMap';
 import { LocationsTable } from '@/components/links/LocationsTable';
 import type { MapPoint } from '@/components/links/LocationsMap';
+import { GoogleMapsIcon } from '@/components/icons/GoogleMapsIcon';
 
 const statusTone = {
   ACTIVE: 'success',
@@ -158,7 +159,8 @@ export function LinkDetailPage() {
                 rel="noopener noreferrer"
                 className={buttonVariants('outline', 'sm')}
               >
-                View on Maps
+                <GoogleMapsIcon className="h-4 w-4" />
+                View on Google Maps
               </a>
             )}
             <Button variant="outline" size="sm" onClick={() => setShareOpen(true)}>

@@ -1,6 +1,7 @@
 import type { LocationRecordDTO } from '@pindrop/shared';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { GoogleMapsIcon } from '@/components/icons/GoogleMapsIcon';
 
 interface LocationsTableProps {
   items: LocationRecordDTO[];
@@ -49,23 +50,9 @@ export function LocationsTable({ items, onDelete }: LocationsTableProps) {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label="Open in Google Maps"
-                          className="shrink-0 rounded p-0.5 text-slate-400 transition-colors duration-150 hover:bg-slate-100 hover:text-brand-600 dark:hover:bg-slate-800 dark:hover:text-brand-400"
+                          className="shrink-0 rounded p-0.5 transition-opacity duration-150 hover:opacity-70"
                         >
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            className="h-3.5 w-3.5"
-                            aria-hidden="true"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
-                            />
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 3h6v6M10 14 21 3" />
-                          </svg>
+                          <GoogleMapsIcon className="h-3.5 w-3.5" />
                         </a>
                       )}
                     </div>

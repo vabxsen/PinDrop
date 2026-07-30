@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { CircleMarker, MapContainer, Popup, TileLayer, useMap } from 'react-leaflet';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { GoogleMapsIcon } from '@/components/icons/GoogleMapsIcon';
 
 const TILE_URL = import.meta.env.VITE_MAP_TILE_URL as string;
 const TILE_ATTRIBUTION = import.meta.env.VITE_MAP_ATTRIBUTION as string;
@@ -76,8 +77,9 @@ export function LocationsMap({ points, height = 360 }: { points: MapPoint[]; hei
                 href={`https://www.google.com/maps/search/?api=1&query=${point.lat},${point.lng}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-1 inline-block font-medium text-brand-600 hover:underline"
+                className="mt-1 inline-flex items-center gap-1 font-medium text-brand-600 hover:underline"
               >
+                <GoogleMapsIcon className="h-3.5 w-3.5" />
                 Open in Google Maps
               </a>
             </Popup>
