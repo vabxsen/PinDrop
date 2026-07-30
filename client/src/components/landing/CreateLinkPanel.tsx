@@ -34,30 +34,35 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
         <motion.div
           key="create-link-globe"
           aria-hidden="true"
-          className="pointer-events-none fixed bottom-0 left-0 top-16 z-40 hidden items-center justify-center overflow-hidden bg-black lg:right-[28rem] lg:flex"
+          className="pointer-events-none fixed bottom-0 left-0 top-16 z-40 hidden flex-col items-center justify-center gap-8 overflow-hidden bg-black lg:right-[28rem] lg:flex"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.2 }}
         >
-          <div
-            aria-hidden="true"
-            className="absolute h-[22rem] w-[22rem] rounded-full bg-brand-500/20 blur-3xl"
-          />
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="auto"
-            className="relative h-[30rem] w-[30rem] object-cover"
-            style={{
-              maskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
-              WebkitMaskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
-            }}
-          >
-            <source src="/earth.mp4" type="video/mp4" />
-          </video>
+          <h3 className="relative z-10 max-w-md text-center text-3xl font-bold tracking-tight text-white xl:text-4xl">
+            Locate anytime, anywhere.
+          </h3>
+          <div className="relative flex items-center justify-center">
+            <div
+              aria-hidden="true"
+              className="absolute h-[22rem] w-[22rem] rounded-full bg-brand-500/20 blur-3xl"
+            />
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              className="relative h-[30rem] w-[30rem] object-cover"
+              style={{
+                maskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
+                WebkitMaskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
+              }}
+            >
+              <source src="/earth.mp4" type="video/mp4" />
+            </video>
+          </div>
         </motion.div>
       )}
       {open && (
