@@ -72,6 +72,14 @@ export function LocationsMap({ points, height = 360 }: { points: MapPoint[]; hei
             <Popup>
               <p className="font-medium">{point.label}</p>
               {point.subLabel && <p className="text-slate-500">{point.subLabel}</p>}
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${point.lat},${point.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 inline-block font-medium text-brand-600 hover:underline"
+              >
+                Open in Google Maps
+              </a>
             </Popup>
           </CircleMarker>
         ))}

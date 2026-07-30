@@ -59,28 +59,55 @@ export function LocationsTable({ items, onDelete }: LocationsTableProps) {
               <td className="px-4 py-3 text-xs text-slate-500 dark:text-slate-400">
                 {new Date(item.createdAt).toLocaleString()}
               </td>
-              <td className="px-4 py-3 text-right">
-                <button
-                  type="button"
-                  onClick={() => onDelete(item.id)}
-                  aria-label="Delete record"
-                  className="cursor-pointer rounded-lg p-1.5 text-slate-400 transition-colors duration-150 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10 dark:hover:text-red-400"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    className="h-4 w-4"
-                    aria-hidden="true"
+              <td className="px-4 py-3">
+                <div className="flex items-center justify-end gap-1">
+                  {item.permissionStatus === 'GRANTED' && item.lat !== null && item.lng !== null && (
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${item.lat},${item.lng}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Open in Google Maps"
+                      className="rounded-lg p-1.5 text-slate-400 transition-colors duration-150 hover:bg-slate-100 hover:text-brand-600 dark:hover:bg-slate-800 dark:hover:text-brand-400"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="h-4 w-4"
+                        aria-hidden="true"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"
+                        />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 3h6v6M10 14 21 3" />
+                      </svg>
+                    </a>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => onDelete(item.id)}
+                    aria-label="Delete record"
+                    className="cursor-pointer rounded-lg p-1.5 text-slate-400 transition-colors duration-150 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-500/10 dark:hover:text-red-400"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16Z"
-                    />
-                  </svg>
-                </button>
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="h-4 w-4"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6h16Z"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
