@@ -51,7 +51,7 @@ export function LocationsMap({ points, height = 360 }: { points: MapPoint[]; hei
 
   return (
     <div
-      className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800"
+      className="isolate overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800"
       style={{ height }}
     >
       <MapContainer

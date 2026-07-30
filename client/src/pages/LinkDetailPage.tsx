@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { linksApi, locationsApi } from '@/lib/api';
 import { useSocketEvent } from '@/lib/socket-context';
 import { Badge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
+import { Button, buttonVariants } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Spinner } from '@/components/ui/Spinner';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -151,6 +151,16 @@ export function LinkDetailPage() {
             )}
           </div>
           <div className="flex flex-wrap gap-2">
+            {points[0] && (
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${points[0].lat},${points[0].lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={buttonVariants('outline', 'sm')}
+              >
+                View on Maps
+              </a>
+            )}
             <Button variant="outline" size="sm" onClick={() => setShareOpen(true)}>
               Share
             </Button>
