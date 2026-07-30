@@ -12,17 +12,25 @@ import { linksApi } from '@/lib/api';
 const formSchema = z.object({
   title: z.string().trim().min(1, 'Title is required').max(120),
   description: z.string().trim().max(500).optional(),
-  expiresAt: z.string().optional(),
+  expiresHours: z.string().optional(),
   maxUses: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-function toDatetimeLocal(iso: string | null): string {
-  if (!iso) return '';
-  const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const MAX_EXPIRES_HOURS = 24;
+
+function toExpiresHours(iso: string | null): string {
+  if (!iso) return '0';
+  const diffMs = new Date(iso).getTime() - Date.now();
+  const hours = Math.round(diffMs / (60 * 60 * 1000));
+  return String(Math.min(MAX_EXPIRES_HOURS, Math.max(0, hours)));
+}
+
+function formatExpiresLabel(hours: string | undefined): string {
+  const n = Number(hours);
+  if (!n) return 'Never';
+  return `${n} ${n === 1 ? 'hour' : 'hours'}`;
 }
 
 interface LinkFormProps {
@@ -44,15 +52,17 @@ export function LinkForm({ open, onClose, onSaved, link, onLivePreviewChange }: 
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { title: '', description: '', expiresAt: '', maxUses: '' },
+    defaultValues: { title: '', description: '', expiresHours: '0', maxUses: '' },
   });
+
+  const expiresHours = watch('expiresHours');
 
   useEffect(() => {
     if (open) {
       reset({
         title: link?.title ?? '',
         description: link?.description ?? '',
-        expiresAt: toDatetimeLocal(link?.expiresAt ?? null),
+        expiresHours: toExpiresHours(link?.expiresAt ?? null),
         maxUses: link?.maxUses ? String(link.maxUses) : '',
       });
     }
@@ -67,10 +77,11 @@ export function LinkForm({ open, onClose, onSaved, link, onLivePreviewChange }: 
   }, [watch, onLivePreviewChange]);
 
   async function onSubmit(data: FormValues) {
+    const hours = Number(data.expiresHours);
     const payload = {
       title: data.title,
       description: data.description?.trim() ? data.description.trim() : null,
-      expiresAt: data.expiresAt ? new Date(data.expiresAt).toISOString() : null,
+      expiresAt: hours > 0 ? new Date(Date.now() + hours * 60 * 60 * 1000).toISOString() : null,
       maxUses: data.maxUses ? Number(data.maxUses) : null,
     };
 
@@ -105,14 +116,35 @@ export function LinkForm({ open, onClose, onSaved, link, onLivePreviewChange }: 
         <p className="text-xs font-medium uppercase tracking-wide text-slate-400 dark:text-slate-500">
           Limits
         </p>
-        <div className="mt-2 grid grid-cols-2 gap-4">
-          <Input
-            label="Expires at"
-            type="datetime-local"
-            icon={<CalendarClock className="h-4 w-4" aria-hidden="true" />}
-            error={errors.expiresAt?.message}
-            {...register('expiresAt')}
-          />
+        <div className="mt-2 flex flex-col gap-5">
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="expiresHours"
+                className="flex items-center gap-1.5 text-sm font-medium text-slate-700 dark:text-slate-300"
+              >
+                <CalendarClock className="h-4 w-4 text-slate-400" aria-hidden="true" />
+                Expires at
+              </label>
+              <span className="text-sm font-medium text-brand-600 dark:text-brand-400">
+                {formatExpiresLabel(expiresHours)}
+              </span>
+            </div>
+            <input
+              id="expiresHours"
+              type="range"
+              min={0}
+              max={MAX_EXPIRES_HOURS}
+              step={1}
+              className="h-2 w-full cursor-pointer appearance-none rounded-full bg-slate-200 accent-brand-600 dark:bg-slate-700"
+              {...register('expiresHours')}
+            />
+            <div className="flex justify-between text-xs text-slate-400 dark:text-slate-500">
+              <span>Never</span>
+              <span>24h</span>
+            </div>
+          </div>
+
           <Input
             label="Max uses"
             type="number"
