@@ -34,13 +34,13 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
         <motion.div
           key="create-link-globe"
           aria-hidden="true"
-          className="pointer-events-none fixed bottom-0 left-0 top-16 z-40 hidden flex-col items-center justify-center gap-6 overflow-hidden bg-black lg:right-[28rem] lg:flex"
+          className="pointer-events-none fixed bottom-0 left-0 top-16 z-40 hidden flex-col items-center justify-center gap-6 overflow-hidden bg-white lg:right-[28rem] lg:flex"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.2 }}
         >
-          <h3 className="relative z-10 max-w-md text-center text-3xl font-bold tracking-tight text-white xl:text-4xl">
+          <h3 className="relative z-10 max-w-md text-center text-3xl font-bold tracking-tight text-slate-900 xl:text-4xl">
             Locate anytime, anywhere.
           </h3>
           <div className="relative flex items-center justify-center">
