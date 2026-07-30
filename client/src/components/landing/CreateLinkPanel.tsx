@@ -35,7 +35,7 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
         <motion.div
           key="create-link-globe"
           aria-hidden="true"
-          className="pointer-events-none fixed inset-y-0 left-0 right-[28rem] z-40 overflow-hidden"
+          className="pointer-events-none fixed inset-y-0 left-0 z-40 hidden items-center justify-center overflow-hidden lg:right-[28rem] lg:flex"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
