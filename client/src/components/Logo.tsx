@@ -9,7 +9,13 @@ export function Logo({
 }) {
   return (
     <span className={cn('inline-flex items-center gap-2', className)}>
-      <img src="/logo.png" alt="" width={22} height={22} className="h-[22px] w-[22px]" />
+      <img
+        src="/logo.png"
+        alt=""
+        width={22}
+        height={22}
+        className="h-[22px] w-[22px] dark:invert"
+      />
       {withWordmark && (
         <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">
           PinDrop
