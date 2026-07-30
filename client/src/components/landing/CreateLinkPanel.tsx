@@ -34,36 +34,12 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
         <motion.div
           key="create-link-globe"
           aria-hidden="true"
-          className="pointer-events-none fixed bottom-0 left-0 top-16 z-40 hidden flex-col items-center justify-center gap-6 overflow-hidden bg-white dark:bg-slate-950 lg:right-[28rem] lg:flex"
+          className="pointer-events-none fixed bottom-0 left-0 top-16 z-40 hidden bg-white dark:bg-slate-950 lg:right-[28rem] lg:block"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.2 }}
-        >
-          <h3 className="relative z-10 max-w-md text-center text-3xl font-bold tracking-tight text-slate-900 dark:text-white xl:text-4xl">
-            Locate anytime, anywhere.
-          </h3>
-          <div className="relative flex items-center justify-center">
-            <div
-              aria-hidden="true"
-              className="absolute h-[27rem] w-[27rem] rounded-full bg-brand-500/20 blur-3xl"
-            />
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              className="relative h-[34rem] w-[34rem] object-cover"
-              style={{
-                maskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
-                WebkitMaskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
-              }}
-            >
-              <source src="/earth.mp4" type="video/mp4" />
-            </video>
-          </div>
-        </motion.div>
+        />
       )}
       {open && (
         <motion.div
