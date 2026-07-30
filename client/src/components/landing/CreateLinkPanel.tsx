@@ -40,13 +40,17 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.2 }}
         >
+          <div
+            aria-hidden="true"
+            className="absolute h-[22rem] w-[22rem] rounded-full bg-brand-500/20 blur-3xl"
+          />
           <video
             autoPlay
             loop
             muted
             playsInline
             preload="auto"
-            className="h-[24rem] w-[24rem] rounded-full object-cover shadow-[0_0_80px_rgba(100,73,255,0.25)]"
+            className="relative h-[26rem] w-[26rem] object-contain"
           >
             <source src="/earth.mp4" type="video/mp4" />
           </video>
