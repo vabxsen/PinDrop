@@ -46,7 +46,7 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
           <div className="relative flex items-center justify-center">
             <div
               aria-hidden="true"
-              className="absolute h-[22rem] w-[22rem] rounded-full bg-brand-500/20 blur-3xl"
+              className="absolute h-[27rem] w-[27rem] rounded-full bg-brand-500/20 blur-3xl"
             />
             <video
               autoPlay
@@ -54,7 +54,7 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
               muted
               playsInline
               preload="auto"
-              className="relative h-[28rem] w-[28rem] object-cover"
+              className="relative h-[34rem] w-[34rem] object-cover"
               style={{
                 maskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
                 WebkitMaskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
