@@ -15,7 +15,7 @@ interface FeatureRowProps {
 export function FeatureRow({ icon: Icon, title, description, reverse, children }: FeatureRowProps) {
   return (
     <div className="flex min-h-[60vh] items-center border-t border-slate-100 py-20 dark:border-slate-900">
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-14 px-6 sm:px-8 lg:grid-cols-2 lg:gap-20">
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-14 px-6 sm:px-8 lg:grid-cols-2 lg:gap-20">
         <motion.div
           initial="hidden"
           whileInView="visible"

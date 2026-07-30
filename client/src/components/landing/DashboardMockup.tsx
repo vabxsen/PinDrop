@@ -73,8 +73,8 @@ export function DashboardMockup({
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center justify-between border-t border-slate-100 px-4 py-2.5 dark:border-slate-800">
-        <p className="font-mono text-[11px] text-slate-400 dark:text-slate-500">
+      <div className="flex shrink-0 items-center justify-between gap-3 border-t border-slate-100 px-4 py-2.5 dark:border-slate-800">
+        <p className="min-w-0 truncate font-mono text-[11px] text-slate-400 dark:text-slate-500">
           {primaryVisitor.lat.toFixed(4)}° N, {Math.abs(primaryVisitor.lng).toFixed(4)}° W · updated{' '}
           {primaryVisitor.timeAgo}
         </p>
@@ -84,7 +84,7 @@ export function DashboardMockup({
             aria-hidden="true"
             tabIndex={-1}
             onClick={(e) => e.preventDefault()}
-            className={buttonVariants('outline', 'sm')}
+            className={buttonVariants('outline', 'sm', 'shrink-0 whitespace-nowrap')}
           >
             <Download className="h-3.5 w-3.5" />
             Export CSV
@@ -94,7 +94,7 @@ export function DashboardMockup({
 
       {showToast && !reduceMotion && (
         <motion.div
-          className="absolute right-4 top-16 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-lg dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+          className="absolute right-4 top-16 hidden rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-lg dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 sm:block"
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: [0, 1, 1, 0], y: [8, 0, 0, -8] }}
           transition={{ duration: 3.2, repeat: Infinity, repeatDelay: 4, ease: 'easeInOut' }}

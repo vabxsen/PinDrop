@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
+import { Menu, X } from 'lucide-react';
 import { Logo } from '@/components/Logo';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { buttonVariants } from '@/components/ui/Button';
@@ -13,8 +15,10 @@ const navLinks = [
 export function PublicLayout() {
   const { status } = useAuth();
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   function handleNavLinkClick(event: React.MouseEvent<HTMLAnchorElement>, to: string) {
+    setMobileOpen(false);
     const [path, hash] = to.split('#');
     if (!hash || location.pathname !== (path || '/')) return;
     event.preventDefault();
@@ -59,8 +63,47 @@ export function PublicLayout() {
                 </NavLink>
               </>
             )}
+            <button
+              type="button"
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg text-slate-600 md:hidden dark:text-slate-300"
+            >
+              {mobileOpen ? (
+                <X className="h-5 w-5" aria-hidden="true" />
+              ) : (
+                <Menu className="h-5 w-5" aria-hidden="true" />
+              )}
+            </button>
           </div>
         </div>
+
+        {mobileOpen && (
+          <div className="border-t border-slate-200 px-4 py-3 md:hidden dark:border-slate-800">
+            <nav className="flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <a
+                  key={link.to}
+                  href={link.to}
+                  onClick={(event) => handleNavLinkClick(event, link.to)}
+                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors duration-150 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800"
+                >
+                  {link.label}
+                </a>
+              ))}
+              {status !== 'authenticated' && (
+                <NavLink
+                  to="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition-colors duration-150 hover:bg-slate-100 sm:hidden dark:text-slate-400 dark:hover:bg-slate-800"
+                >
+                  Log in
+                </NavLink>
+              )}
+            </nav>
+          </div>
+        )}
       </header>
 
       <main className="flex-1">

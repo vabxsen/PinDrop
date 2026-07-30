@@ -56,7 +56,7 @@ function PermissionPromptVisual() {
 export function ConsentEditorial() {
   return (
     <section className="mx-auto max-w-6xl px-6 py-28 sm:px-8 sm:py-36">
-      <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
+      <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-2 lg:gap-20">
         <motion.div
           initial="hidden"
           whileInView="visible"
