@@ -50,7 +50,11 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
             muted
             playsInline
             preload="auto"
-            className="relative h-[26rem] w-[26rem] object-contain"
+            className="relative h-[30rem] w-[30rem] object-cover"
+            style={{
+              maskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
+              WebkitMaskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
+            }}
           >
             <source src="/earth.mp4" type="video/mp4" />
           </video>
