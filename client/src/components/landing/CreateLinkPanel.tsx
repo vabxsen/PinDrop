@@ -49,15 +49,15 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
           }
           transition={{
             x: { duration: 0.6, ease: sectionEase },
-            filter: { duration: 0.6, ease: 'easeInOut' },
+            filter: { duration: 0.6, ease: 'linear' },
           }}
           className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col overflow-y-auto border-l border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900"
         >
-          <div className="relative overflow-hidden px-6 pb-6 pt-8 sm:px-8">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -right-16 -top-24 h-56 w-56 rounded-full bg-brand-400/20 blur-3xl dark:bg-brand-500/10"
-            />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute right-0 top-1/2 -z-10 h-72 w-72 -translate-y-1/2 translate-x-1/3 rounded-full bg-brand-400/20 blur-3xl dark:bg-brand-500/10"
+          />
+          <div className="relative px-6 pb-6 pt-8 sm:px-8">
             <button
               type="button"
               onClick={onClose}

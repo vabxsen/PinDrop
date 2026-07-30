@@ -44,7 +44,7 @@ export function LandingPage() {
         }
         transition={{
           x: { duration: 0.6, ease: sectionEase },
-          filter: { duration: 0.6, ease: 'easeInOut' },
+          filter: { duration: 0.6, ease: 'linear' },
         }}
       >
         <LandingHero />
