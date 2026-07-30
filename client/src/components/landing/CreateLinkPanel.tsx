@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { Link2, X } from 'lucide-react';
 import type { LinkDTO } from '@pindrop/shared';
 import { LinkForm } from '@/components/links/LinkForm';
 import { sectionEase } from './motion';
@@ -50,35 +51,36 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
             x: { duration: 0.6, ease: sectionEase },
             filter: { duration: 0.6, ease: 'easeInOut' },
           }}
-          className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col overflow-y-auto border-l border-slate-200 bg-white p-6 shadow-2xl sm:p-8 dark:border-slate-800 dark:bg-slate-900"
+          className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col overflow-y-auto border-l border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900"
         >
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close"
-            className="absolute right-4 top-4 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg text-slate-400 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-300"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="h-4 w-4"
+          <div className="relative overflow-hidden px-6 pb-6 pt-8 sm:px-8">
+            <div
               aria-hidden="true"
+              className="pointer-events-none absolute -right-16 -top-24 h-56 w-56 rounded-full bg-brand-400/20 blur-3xl dark:bg-brand-500/10"
+            />
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="absolute right-4 top-4 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-300"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6 6 18" />
-            </svg>
-          </button>
-          <h2
-            id="create-link-panel-title"
-            className="text-lg font-semibold text-slate-900 dark:text-white"
-          >
-            Create a new link
-          </h2>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-            Anyone with this link can be asked to share their location.
-          </p>
-          <div className="mt-6">
+              <X className="h-4.5 w-4.5" aria-hidden="true" />
+            </button>
+            <span className="relative flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-brand-600 shadow-sm dark:border-slate-700 dark:bg-slate-950 dark:text-brand-400">
+              <Link2 className="h-5 w-5" aria-hidden="true" />
+            </span>
+            <h2
+              id="create-link-panel-title"
+              className="relative mt-4 text-xl font-bold tracking-tight text-slate-900 dark:text-white"
+            >
+              Create a new link
+            </h2>
+            <p className="relative mt-1.5 text-sm text-slate-500 dark:text-slate-400">
+              Anyone with this link can be asked to share their location.
+            </p>
+          </div>
+
+          <div className="border-t border-slate-100 px-6 py-6 sm:px-8 dark:border-slate-800/80">
             <LinkForm open={open} onClose={onClose} onSaved={onSaved} />
           </div>
         </motion.div>

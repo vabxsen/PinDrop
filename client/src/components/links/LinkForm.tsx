@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
+import { AlignLeft, CalendarClock, Hash, Link2, Type } from 'lucide-react';
 import type { LinkDTO } from '@pindrop/shared';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
@@ -75,36 +76,51 @@ export function LinkForm({ open, onClose, onSaved, link }: LinkFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-5">
       <Input
         label="Title"
         placeholder="e.g. Meet me here"
+        icon={<Type className="h-4 w-4" aria-hidden="true" />}
         error={errors.title?.message}
         {...register('title')}
       />
       <Input
         label="Description"
         placeholder="Optional message shown to the visitor"
+        icon={<AlignLeft className="h-4 w-4" aria-hidden="true" />}
         error={errors.description?.message}
         {...register('description')}
       />
-      <div className="grid grid-cols-2 gap-4">
-        <Input
-          label="Expires at"
-          type="datetime-local"
-          error={errors.expiresAt?.message}
-          {...register('expiresAt')}
-        />
-        <Input
-          label="Max uses"
-          type="number"
-          min={1}
-          placeholder="Unlimited"
-          error={errors.maxUses?.message}
-          {...register('maxUses')}
-        />
+      <div>
+        <p className="text-xs font-medium uppercase tracking-wide text-slate-400 dark:text-slate-500">
+          Limits
+        </p>
+        <div className="mt-2 grid grid-cols-2 gap-4">
+          <Input
+            label="Expires at"
+            type="datetime-local"
+            icon={<CalendarClock className="h-4 w-4" aria-hidden="true" />}
+            error={errors.expiresAt?.message}
+            {...register('expiresAt')}
+          />
+          <Input
+            label="Max uses"
+            type="number"
+            min={1}
+            placeholder="Unlimited"
+            icon={<Hash className="h-4 w-4" aria-hidden="true" />}
+            error={errors.maxUses?.message}
+            {...register('maxUses')}
+          />
+        </div>
       </div>
-      <Button type="submit" size="lg" loading={isSubmitting} className="mt-2 w-full">
+      <Button
+        type="submit"
+        size="lg"
+        loading={isSubmitting}
+        icon={!isSubmitting ? <Link2 className="h-4 w-4" aria-hidden="true" /> : undefined}
+        className="mt-1 w-full"
+      >
         {isEdit ? 'Save changes' : 'Create link'}
       </Button>
     </form>
