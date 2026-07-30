@@ -31,7 +31,7 @@ const inactiveCopy: Record<
 
 function Shell({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 py-12 dark:bg-slate-950">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-white px-4 py-12 dark:bg-black">
       <div className="mb-8 text-brand-600">
         <Logo />
       </div>

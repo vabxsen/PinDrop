@@ -21,7 +21,7 @@ export function Spinner({ className }: { className?: string }) {
 
 export function FullPageSpinner() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white dark:bg-slate-950">
+    <div className="flex min-h-screen items-center justify-center bg-white dark:bg-black">
       <Spinner className="h-8 w-8" />
     </div>
   );

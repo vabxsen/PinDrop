@@ -33,7 +33,7 @@ export function LinkVisitorPreview({ title, description, className }: LinkVisito
           className="absolute -right-[3px] top-32 h-14 w-[3px] rounded-r-sm bg-slate-700"
         />
 
-        <div className="relative h-[560px] w-[260px] overflow-hidden rounded-[2.1rem] bg-white dark:bg-slate-950">
+        <div className="relative h-[560px] w-[260px] overflow-hidden rounded-[2.1rem] bg-white dark:bg-black">
           <span
             aria-hidden="true"
             className="absolute left-1/2 top-0 z-20 h-6 w-28 -translate-x-1/2 rounded-b-2xl bg-slate-900"
