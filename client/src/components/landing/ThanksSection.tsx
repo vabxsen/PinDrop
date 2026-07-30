@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
-import { PrimaryCta } from './PrimaryCta';
 import { fadeUp, viewportOnce } from './motion';
 
-export function FinalCta() {
+export function ThanksSection() {
   return (
     <section className="mx-auto max-w-3xl px-6 py-32 text-center sm:px-8 sm:py-44">
       <motion.div
@@ -12,12 +11,16 @@ export function FinalCta() {
         variants={fadeUp}
         transition={{ duration: 0.7 }}
       >
-        <h2 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl dark:text-white">
-          Create your first PinDrop.
+        <img
+          src="/thanks-visiting.png"
+          alt="A cheerful cartoon character giving a thumbs up"
+          width={160}
+          height={160}
+          className="mx-auto h-40 w-40 rounded-3xl object-cover shadow-xl"
+        />
+        <h2 className="mt-8 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+          Thanks for visiting.
         </h2>
-        <div className="mt-10">
-          <PrimaryCta />
-        </div>
       </motion.div>
     </section>
   );

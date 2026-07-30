@@ -10,7 +10,7 @@ import { DashboardShowcase } from '@/components/landing/DashboardShowcase';
 import { FeatureShowcase } from '@/components/landing/FeatureShowcase';
 import { StatsBand } from '@/components/landing/StatsBand';
 import { FaqSection } from '@/components/landing/FaqSection';
-import { FinalCta } from '@/components/landing/FinalCta';
+import { ThanksSection } from '@/components/landing/ThanksSection';
 import { CreateLinkTransitionContext } from '@/components/landing/CreateLinkTransitionContext';
 import { CreateLinkPanel } from '@/components/landing/CreateLinkPanel';
 import { sectionEase } from '@/components/landing/motion';
@@ -44,7 +44,7 @@ export function LandingPage() {
         <FeatureShowcase />
         <StatsBand />
         <FaqSection />
-        <FinalCta />
+        <ThanksSection />
       </motion.div>
 
       <CreateLinkPanel
