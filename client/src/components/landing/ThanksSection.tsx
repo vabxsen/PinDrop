@@ -3,7 +3,7 @@ import { fadeUp, viewportOnce } from './motion';
 
 export function ThanksSection() {
   return (
-    <section className="mx-auto max-w-3xl px-6 pb-16 pt-2 sm:px-8 sm:pb-20 sm:pt-4">
+    <section className="mx-auto max-w-3xl px-6 pb-16 pt-0 sm:px-8 sm:pb-20 sm:pt-0">
       <motion.div
         initial="hidden"
         whileInView="visible"
