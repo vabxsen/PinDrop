@@ -55,14 +55,13 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
               playsInline
               preload="auto"
               className="relative h-[34rem] w-[34rem] object-cover"
+              style={{
+                maskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
+                WebkitMaskImage: 'radial-gradient(circle, black 50%, transparent 72%)',
+              }}
             >
               <source src="/earth.mp4" type="video/mp4" />
             </video>
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute h-[34rem] w-[34rem]"
-              style={{ background: 'radial-gradient(circle, transparent 48%, white 74%)' }}
-            />
           </div>
         </motion.div>
       )}
