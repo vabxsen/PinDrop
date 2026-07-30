@@ -30,15 +30,17 @@ interface LinkFormProps {
   onClose: () => void;
   onSaved: (link: LinkDTO) => void;
   link?: LinkDTO | null;
+  onLivePreviewChange?: (values: { title: string; description: string }) => void;
 }
 
-export function LinkForm({ open, onClose, onSaved, link }: LinkFormProps) {
+export function LinkForm({ open, onClose, onSaved, link, onLivePreviewChange }: LinkFormProps) {
   const isEdit = Boolean(link);
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -55,6 +57,14 @@ export function LinkForm({ open, onClose, onSaved, link }: LinkFormProps) {
       });
     }
   }, [open, link, reset]);
+
+  useEffect(() => {
+    if (!onLivePreviewChange) return;
+    const subscription = watch((values) => {
+      onLivePreviewChange({ title: values.title ?? '', description: values.description ?? '' });
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, onLivePreviewChange]);
 
   async function onSubmit(data: FormValues) {
     const payload = {

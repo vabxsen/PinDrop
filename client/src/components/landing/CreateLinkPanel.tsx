@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Link2, X } from 'lucide-react';
 import type { LinkDTO } from '@pindrop/shared';
 import { LinkForm } from '@/components/links/LinkForm';
+import { LinkVisitorPreview } from './LinkVisitorPreview';
 import { sectionEase } from './motion';
 
 interface CreateLinkPanelProps {
@@ -14,11 +15,20 @@ interface CreateLinkPanelProps {
 
 export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps) {
   const reduceMotion = useReducedMotion();
+  const [preview, setPreview] = useState({ title: '', description: '' });
+
+  function handleClose() {
+    setPreview({ title: '', description: '' });
+    onClose();
+  }
 
   useEffect(() => {
     if (!open) return;
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        setPreview({ title: '', description: '' });
+        onClose();
+      }
     }
     document.addEventListener('keydown', handleKeyDown);
     document.body.style.overflow = 'hidden';
@@ -34,12 +44,22 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
         <motion.div
           key="create-link-globe"
           aria-hidden="true"
-          className="pointer-events-none fixed bottom-0 left-0 top-16 z-40 hidden bg-white dark:bg-slate-950 lg:right-[28rem] lg:block"
+          className="pointer-events-none fixed bottom-0 left-0 top-16 z-40 hidden flex-col items-center justify-center overflow-hidden bg-white p-10 dark:bg-slate-950 lg:right-[28rem] lg:flex lg:p-14"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, delay: reduceMotion ? 0 : 0.2 }}
-        />
+        >
+          <div
+            aria-hidden="true"
+            className="absolute h-[28rem] w-[28rem] rounded-full bg-brand-500/10 blur-3xl"
+          />
+          <LinkVisitorPreview
+            title={preview.title}
+            description={preview.description}
+            className="relative h-full w-full max-w-md"
+          />
+        </motion.div>
       )}
       {open && (
         <motion.div
@@ -60,7 +80,7 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
           <div className="relative px-6 pb-6 pt-8 sm:px-8">
             <button
               type="button"
-              onClick={onClose}
+              onClick={handleClose}
               aria-label="Close"
               className="absolute right-4 top-4 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-slate-400 transition-colors duration-150 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800 dark:hover:text-slate-300"
             >
@@ -81,7 +101,12 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
           </div>
 
           <div className="border-t border-slate-100 px-6 py-6 dark:border-slate-800 sm:px-8">
-            <LinkForm open={open} onClose={onClose} onSaved={onSaved} />
+            <LinkForm
+              open={open}
+              onClose={handleClose}
+              onSaved={onSaved}
+              onLivePreviewChange={setPreview}
+            />
           </div>
         </motion.div>
       )}
