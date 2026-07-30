@@ -34,18 +34,8 @@ export function LandingPage() {
         aria-hidden={isCreateOpen}
         className="overflow-x-clip"
         initial={false}
-        animate={
-          reduceMotion
-            ? undefined
-            : {
-                x: isCreateOpen ? '-100%' : '0%',
-                filter: ['blur(0px)', 'blur(10px)', 'blur(0px)'],
-              }
-        }
-        transition={{
-          x: { duration: 0.6, ease: sectionEase },
-          filter: { duration: 0.6, ease: 'linear' },
-        }}
+        animate={reduceMotion ? undefined : { x: isCreateOpen ? '-100%' : '0%' }}
+        transition={{ duration: 0.6, ease: sectionEase }}
       >
         <LandingHero />
         <ConsentEditorial />

@@ -36,21 +36,10 @@ export function CreateLinkPanel({ open, onClose, onSaved }: CreateLinkPanelProps
           role="dialog"
           aria-modal="true"
           aria-labelledby="create-link-panel-title"
-          initial={reduceMotion ? { opacity: 0 } : { x: '100%', filter: 'blur(0px)' }}
-          animate={
-            reduceMotion
-              ? { opacity: 1 }
-              : { x: '0%', filter: ['blur(0px)', 'blur(10px)', 'blur(0px)'] }
-          }
-          exit={
-            reduceMotion
-              ? { opacity: 0 }
-              : { x: '100%', filter: ['blur(0px)', 'blur(10px)', 'blur(0px)'] }
-          }
-          transition={{
-            x: { duration: 0.6, ease: sectionEase },
-            filter: { duration: 0.6, ease: 'linear' },
-          }}
+          initial={reduceMotion ? { opacity: 0 } : { x: '100%' }}
+          animate={reduceMotion ? { opacity: 1 } : { x: '0%' }}
+          exit={reduceMotion ? { opacity: 0 } : { x: '100%' }}
+          transition={{ duration: 0.6, ease: sectionEase }}
           className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col overflow-y-auto border-l border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900"
         >
           <div
