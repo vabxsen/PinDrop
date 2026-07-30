@@ -47,15 +47,15 @@
   }
 
   .animate-spin-globe {
-    animation: spin-globe 34s linear infinite;
+    animation: spin-globe 40s linear infinite;
   }
 }
 
 @keyframes spin-globe {
   from {
-    transform: translateX(0%);
+    transform: rotateY(0deg);
   }
   to {
-    transform: translateX(-50%);
+    transform: rotateY(360deg);
   }
 }
