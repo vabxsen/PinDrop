@@ -139,8 +139,7 @@ export function LinkForm({ open, onClose, onSaved, link, onLivePreviewChange }: 
               className="h-2 w-full cursor-pointer appearance-none rounded-full bg-slate-200 accent-brand-600 dark:bg-slate-700"
               {...register('expiresHours')}
             />
-            <div className="flex justify-between text-xs text-slate-400 dark:text-slate-500">
-              <span>Never</span>
+            <div className="flex justify-end text-xs text-slate-400 dark:text-slate-500">
               <span>24h</span>
             </div>
           </div>
