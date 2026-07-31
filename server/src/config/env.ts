@@ -9,14 +9,14 @@ const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
   DIRECT_URL: z.string().min(1).optional(),
 
-  JWT_ACCESS_SECRET: z.string().min(16),
-  JWT_REFRESH_SECRET: z.string().min(16),
+  JWT_ACCESS_SECRET: z.string().min(32),
+  JWT_REFRESH_SECRET: z.string().min(32),
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   JWT_REFRESH_EXPIRES_IN_DAYS: z.coerce.number().int().positive().default(7),
   JWT_REFRESH_EXPIRES_IN_REMEMBER_DAYS: z.coerce.number().int().positive().default(30),
 
-  COOKIE_SECRET: z.string().min(16),
-  CSRF_SECRET: z.string().min(16),
+  COOKIE_SECRET: z.string().min(32),
+  CSRF_SECRET: z.string().min(32),
 
   GOOGLE_CLIENT_ID: z.string().min(1),
 

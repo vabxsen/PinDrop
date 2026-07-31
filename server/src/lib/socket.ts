@@ -25,7 +25,9 @@ export function initSocket(httpServer: HttpServer): SocketIOServer {
       return;
     }
     try {
-      const payload = jwt.verify(token, env.JWT_ACCESS_SECRET) as AccessTokenPayload;
+      const payload = jwt.verify(token, env.JWT_ACCESS_SECRET, {
+        algorithms: ['HS256'],
+      }) as AccessTokenPayload;
       socket.data.userId = payload.sub;
       next();
     } catch {

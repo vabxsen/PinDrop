@@ -12,6 +12,7 @@ export default tseslint.config(
       '**/node_modules/**',
       '**/coverage/**',
       'server/prisma/migrations/**',
+      'client/public/**',
     ],
   },
   js.configs.recommended,

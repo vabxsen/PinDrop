@@ -5,6 +5,9 @@ import { AVATAR_PRESET_VALUES, THEME_VALUES } from '../types/enums.js';
 export const updateProfileSchema = z.object({
   name: z.string().trim().min(1).max(100).optional().nullable(),
   email: emailSchema.optional(),
+  // Required only when email is actually changing and the account has a password
+  // set — enforced in the service layer, since that depends on current user state.
+  currentPassword: z.string().max(128).optional().default(''),
 });
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
 

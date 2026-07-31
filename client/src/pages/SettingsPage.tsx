@@ -213,19 +213,29 @@ function ProfileSection() {
   const {
     register,
     handleSubmit,
+    watch,
+    reset,
     formState: { errors, isSubmitting },
-  } = useForm<UpdateProfileInput>({
+  } = useForm<z.input<typeof updateProfileSchema>, unknown, UpdateProfileInput>({
     resolver: zodResolver(updateProfileSchema),
-    defaultValues: { name: user?.name ?? '', email: user?.email ?? '' },
+    defaultValues: { name: user?.name ?? '', email: user?.email ?? '', currentPassword: '' },
   });
+
+  const emailChanged = watch('email') !== user?.email;
+  const hasPassword = user?.hasPassword ?? true;
 
   async function onSubmit(data: UpdateProfileInput) {
     try {
       const result = await settingsApi.updateProfile(data);
       setUser(result.user);
+      reset({ name: result.user.name ?? '', email: result.user.email, currentPassword: '' });
       toast.success('Profile updated');
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to update profile');
+      if (err instanceof ApiError && err.status === 401) {
+        toast.error('Current password is incorrect');
+      } else {
+        toast.error(err instanceof Error ? err.message : 'Failed to update profile');
+      }
     }
   }
 
@@ -282,6 +292,16 @@ function ProfileSection() {
             error={errors.email?.message}
             {...register('email')}
           />
+          {emailChanged && hasPassword && (
+            <Input
+              label="Current password"
+              type="password"
+              autoComplete="current-password"
+              hint="Required to change your email."
+              error={errors.currentPassword?.message}
+              {...register('currentPassword')}
+            />
+          )}
           <Button type="submit" loading={isSubmitting} className="self-start">
             Save changes
           </Button>

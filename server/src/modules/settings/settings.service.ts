@@ -18,6 +18,17 @@ const googleClient = new OAuth2Client(env.GOOGLE_CLIENT_ID);
 
 export async function updateProfile(userId: string, input: UpdateProfileInput) {
   if (input.email) {
+    const current = await prisma.user.findUnique({ where: { id: userId } });
+    if (!current) throw notFound('User not found');
+
+    // Changing the email on file is what a password reset trusts, so require
+    // re-authentication here the same way changePassword and deleteAccount do —
+    // otherwise a stolen access token could redirect resets to an attacker's inbox.
+    if (input.email !== current.email && current.passwordHash) {
+      const valid = await bcrypt.compare(input.currentPassword, current.passwordHash);
+      if (!valid) throw unauthorized('Current password is incorrect');
+    }
+
     const existing = await prisma.user.findUnique({ where: { email: input.email } });
     if (existing && existing.id !== userId) {
       throw conflict('An account with this email already exists');
