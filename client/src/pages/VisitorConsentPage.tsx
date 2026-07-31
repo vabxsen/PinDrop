@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 import { ApiError, visitorApi } from '@/lib/api';
 import { requestLocation, type DeclineReason } from '@/lib/geolocation';
+import { useSeo } from '@/lib/useSeo';
 
 type Stage =
   'loading' | 'not-found' | 'inactive' | 'consent' | 'requesting' | 'granted' | 'declined';
@@ -41,6 +42,9 @@ function Shell({ children }: { children: ReactNode }) {
 }
 
 export function VisitorConsentPage() {
+  // Never indexable: each short link is a private, per-visitor sharing URL.
+  useSeo({ title: 'PinDrop', path: '/l', robots: 'noindex, nofollow' });
+
   const { shortId } = useParams<{ shortId: string }>();
   const [stage, setStage] = useState<Stage>('loading');
   const [meta, setMeta] = useState<LinkPublicMetaDTO | null>(null);

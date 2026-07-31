@@ -8,8 +8,15 @@ import { Button } from '@/components/ui/Button';
 import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { useAuth } from '@/lib/auth-context';
 import { ApiError } from '@/lib/api';
+import { useSeo } from '@/lib/useSeo';
 
 export function SignupPage() {
+  useSeo({
+    title: 'Sign up — PinDrop',
+    description: 'Create a free PinDrop account and start sharing consent-based location links.',
+    path: '/signup',
+  });
+
   const { register: registerUser } = useAuth();
   const navigate = useNavigate();
 

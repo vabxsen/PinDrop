@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /signup
+Disallow: /app/
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /l/
+
+Sitemap: https://pindrop-locationtracker.firebaseapp.com/sitemap.xml

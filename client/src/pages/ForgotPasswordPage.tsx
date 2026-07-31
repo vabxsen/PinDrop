@@ -6,8 +6,11 @@ import { forgotPasswordSchema, type ForgotPasswordInput } from '@pindrop/shared'
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { authApi } from '@/lib/api';
+import { useSeo } from '@/lib/useSeo';
 
 export function ForgotPasswordPage() {
+  useSeo({ title: 'Reset your password — PinDrop', path: '/forgot-password', robots: 'noindex, nofollow' });
+
   const [sent, setSent] = useState(false);
 
   const {

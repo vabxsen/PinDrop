@@ -14,8 +14,16 @@ import { ThanksSection } from '@/components/landing/ThanksSection';
 import { CreateLinkTransitionContext } from '@/components/landing/CreateLinkTransitionContext';
 import { CreateLinkPanel } from '@/components/landing/CreateLinkPanel';
 import { sectionEase } from '@/components/landing/motion';
+import { useSeo } from '@/lib/useSeo';
 
 export function LandingPage() {
+  useSeo({
+    title: 'PinDrop — Consent-Based Location Sharing Links',
+    description:
+      'Create a shareable link, ask for consent, and see exactly where it was opened. No app or account needed for the visitor, and nothing is captured until they explicitly say yes.',
+    path: '/',
+  });
+
   const [isCreateOpen, setCreateOpen] = useState(false);
   const reduceMotion = useReducedMotion();
   const navigate = useNavigate();

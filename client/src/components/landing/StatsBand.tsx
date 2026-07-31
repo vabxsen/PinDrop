@@ -12,6 +12,7 @@ const stats = [
 export function StatsBand() {
   return (
     <section className="border-t border-slate-100 py-24 dark:border-slate-900">
+      <h2 className="sr-only">PinDrop by the numbers</h2>
       <motion.div
         initial="hidden"
         whileInView="visible"

@@ -7,6 +7,7 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { AccountMenu } from '@/components/layout/AccountMenu';
 import { useAuth } from '@/lib/auth-context';
 import { cn } from '@/lib/cn';
+import { useSeo } from '@/lib/useSeo';
 
 const navItems = [
   {
@@ -101,6 +102,10 @@ function NavItems({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 export function AppLayout() {
+  // Defense-in-depth: /app/* is already disallowed in robots.txt and unreachable
+  // without logging in, but this covers every nested route in one place too.
+  useSeo({ title: 'PinDrop', path: '/app', robots: 'noindex, nofollow' });
+
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);

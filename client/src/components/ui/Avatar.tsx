@@ -29,6 +29,14 @@ const sizeClasses = {
   lg: 'h-14 w-14 text-xl',
 };
 
+// Pixel equivalents of the size classes above, for the <img>'s width/height
+// attributes (avoids layout shift while the image loads).
+const sizePx = {
+  sm: 36,
+  md: 44,
+  lg: 56,
+};
+
 const presetIconSizeClasses = {
   sm: 'h-4 w-4',
   md: 'h-5 w-5',
@@ -69,7 +77,10 @@ export function Avatar({ name, email, avatarUrl, avatarPreset, size = 'sm', clas
     return (
       <img
         src={avatarUrl}
-        alt=""
+        alt={name ? `${name}'s avatar` : 'User avatar'}
+        width={sizePx[size]}
+        height={sizePx[size]}
+        loading="lazy"
         referrerPolicy="no-referrer"
         onError={() => setImgFailed(true)}
         className={cn('shrink-0 rounded-full object-cover', sizeClasses[size], className)}

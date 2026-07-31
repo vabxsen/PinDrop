@@ -11,8 +11,15 @@ import { Button } from '@/components/ui/Button';
 import { GoogleSignInButton } from '@/components/GoogleSignInButton';
 import { useAuth } from '@/lib/auth-context';
 import { ApiError } from '@/lib/api';
+import { useSeo } from '@/lib/useSeo';
 
 export function LoginPage() {
+  useSeo({
+    title: 'Log in — PinDrop',
+    description: 'Log in to PinDrop to manage your consent-based location sharing links.',
+    path: '/login',
+  });
+
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();

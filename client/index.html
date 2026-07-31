@@ -2,13 +2,52 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>PinDrop — Consent-Based Location Sharing Links</title>
     <meta
       name="description"
-      content="PinDrop — create a shareable link, ask for consent, and see exactly where it was opened."
+      content="PinDrop — create a shareable link, ask for consent, and see exactly where it was opened. No app or account needed for the visitor, and nothing is captured until they explicitly say yes."
     />
-    <title>PinDrop</title>
+    <meta name="author" content="PinDrop" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://pindrop-locationtracker.firebaseapp.com/" />
+    <meta name="theme-color" content="#5330f0" />
+
+    <!-- Google Search Console: paste the verification code Google gives you into
+         the content attribute below, then redeploy (firebase deploy --only hosting). -->
+    <meta name="google-site-verification" content="PASTE_VERIFICATION_CODE_HERE" />
+
+    <!-- Open Graph / social share preview -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PinDrop" />
+    <meta property="og:title" content="PinDrop — Consent-Based Location Sharing Links" />
+    <meta
+      property="og:description"
+      content="Create a shareable link, ask for consent, and see exactly where it was opened. No app or account needed for the visitor."
+    />
+    <meta property="og:url" content="https://pindrop-locationtracker.firebaseapp.com/" />
+    <meta property="og:image" content="https://pindrop-locationtracker.firebaseapp.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PinDrop — Consent-Based Location Sharing Links" />
+    <meta
+      name="twitter:description"
+      content="Create a shareable link, ask for consent, and see exactly where it was opened. No app or account needed for the visitor."
+    />
+    <meta name="twitter:image" content="https://pindrop-locationtracker.firebaseapp.com/og-image.png" />
+
+    <!-- Favicons / app icons -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -16,6 +55,23 @@
       rel="stylesheet"
     />
     <script src="/theme-init.js"></script>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "PinDrop",
+        "url": "https://pindrop-locationtracker.firebaseapp.com/",
+        "description": "Consent-based location sharing links. Create a shareable link, ask for consent, and see exactly where it was opened.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Web",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

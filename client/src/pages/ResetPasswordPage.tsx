@@ -7,11 +7,15 @@ import { passwordSchema } from '@pindrop/shared';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { authApi } from '@/lib/api';
+import { useSeo } from '@/lib/useSeo';
 
 const formSchema = z.object({ password: passwordSchema });
 type FormInput = z.infer<typeof formSchema>;
 
 export function ResetPasswordPage() {
+  // Never indexable: the URL carries a live, single-use password-reset token.
+  useSeo({ title: 'Set a new password — PinDrop', path: '/reset-password', robots: 'noindex, nofollow' });
+
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token') ?? '';
   const navigate = useNavigate();

@@ -17,6 +17,7 @@ export function ThanksSection() {
           alt="A cheerful cartoon character giving a thumbs up"
           width={160}
           height={160}
+          loading="lazy"
           className="h-40 w-40 shrink-0 object-contain"
         />
         <div>
