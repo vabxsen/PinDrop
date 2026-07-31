@@ -31,6 +31,7 @@ export function LinkDetailPage() {
   const [formOpen, setFormOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deletingRecordId, setDeletingRecordId] = useState<string | null>(null);
 
   const linkQuery = useQuery({
     queryKey: ['links', id],
@@ -230,7 +231,7 @@ export function LinkDetailPage() {
       </div>
       <LocationsTable
         items={locationsQuery.data?.items ?? []}
-        onDelete={(recordId) => deleteRecord.mutate(recordId)}
+        onDelete={(recordId) => setDeletingRecordId(recordId)}
       />
 
       <LinkFormDialog
@@ -250,6 +251,17 @@ export function LinkDetailPage() {
         onConfirm={() => remove.mutateAsync()}
         title="Delete this link?"
         description="This link and all of its location records will be permanently deleted. This can't be undone."
+        confirmLabel="Delete"
+        danger
+      />
+      <ConfirmDialog
+        open={Boolean(deletingRecordId)}
+        onClose={() => setDeletingRecordId(null)}
+        onConfirm={async () => {
+          if (deletingRecordId) await deleteRecord.mutateAsync(deletingRecordId);
+        }}
+        title="Delete this response?"
+        description="This location response will be permanently deleted. This can't be undone."
         confirmLabel="Delete"
         danger
       />
