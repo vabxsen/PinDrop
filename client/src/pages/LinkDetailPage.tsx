@@ -59,6 +59,11 @@ export function LinkDetailPage() {
   useSocketEvent<{ linkId: string }>('permission:denied', (payload) => {
     if (payload.linkId === id) invalidate();
   });
+  // The reverse-geocoded address lands after the record it belongs to; refetch quietly so
+  // it fills into the table and map without re-announcing the same visit.
+  useSocketEvent<{ linkId: string }>('location:enriched', (payload) => {
+    if (payload.linkId === id) invalidate();
+  });
 
   const toggleDisabled = useMutation({
     mutationFn: () => linksApi.setDisabled(id!, { disabled: !linkQuery.data?.link.disabled }),

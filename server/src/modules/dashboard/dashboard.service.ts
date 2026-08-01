@@ -23,9 +23,12 @@ export async function getStats(userId: string) {
 }
 
 export async function getDailyLocationsChart(userId: string) {
+  // Bucket keys come from toISOString(), which is UTC, so the window has to be built in UTC
+  // too — mixing in local midnight would shift the first and last buckets on any host whose
+  // clock isn't already set to UTC.
   const since = new Date();
-  since.setDate(since.getDate() - (DASHBOARD_DAILY_CHART_DAYS - 1));
-  since.setHours(0, 0, 0, 0);
+  since.setUTCDate(since.getUTCDate() - (DASHBOARD_DAILY_CHART_DAYS - 1));
+  since.setUTCHours(0, 0, 0, 0);
 
   const records = await prisma.locationRecord.findMany({
     where: { link: { userId }, permissionStatus: 'GRANTED', createdAt: { gte: since } },
@@ -35,7 +38,7 @@ export async function getDailyLocationsChart(userId: string) {
   const counts = new Map<string, number>();
   for (let i = 0; i < DASHBOARD_DAILY_CHART_DAYS; i++) {
     const d = new Date(since);
-    d.setDate(d.getDate() + i);
+    d.setUTCDate(d.getUTCDate() + i);
     counts.set(d.toISOString().slice(0, 10), 0);
   }
   for (const record of records) {
@@ -47,15 +50,19 @@ export async function getDailyLocationsChart(userId: string) {
 }
 
 export async function getTopCountriesChart(userId: string) {
-  const records = await prisma.locationRecord.findMany({
+  // Aggregate in the database rather than pulling every granted record into memory. The
+  // per-row `country ?? ipCountry` fallback still has to be resolved here, but the number of
+  // distinct pairs is bounded by geography instead of growing with traffic.
+  const groups = await prisma.locationRecord.groupBy({
+    by: ['country', 'ipCountry'],
     where: { link: { userId }, permissionStatus: 'GRANTED' },
-    select: { country: true, ipCountry: true },
+    _count: { _all: true },
   });
 
   const counts = new Map<string, number>();
-  for (const record of records) {
-    const key = record.country ?? record.ipCountry ?? 'Unknown';
-    counts.set(key, (counts.get(key) ?? 0) + 1);
+  for (const group of groups) {
+    const key = group.country ?? group.ipCountry ?? 'Unknown';
+    counts.set(key, (counts.get(key) ?? 0) + group._count._all);
   }
 
   return Array.from(counts.entries())

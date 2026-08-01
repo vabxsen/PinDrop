@@ -40,6 +40,10 @@ export function DashboardPage() {
     invalidateAll();
   });
 
+  // The reverse-geocoded address lands after the record it belongs to, so refetch quietly
+  // here — a second toast would announce what is still the same visit.
+  useSocketEvent('location:enriched', invalidateAll);
+
   const stats = useQuery({ queryKey: ['dashboard', 'stats'], queryFn: dashboardApi.stats });
   const daily = useQuery({
     queryKey: ['dashboard', 'daily'],

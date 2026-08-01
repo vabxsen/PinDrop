@@ -178,12 +178,19 @@ export const locationsApi = {
     apiRequest<PaginatedDTO<LocationRecordDTO>>(`/api/locations${toQuery(query)}`),
   remove: (id: string) => apiRequest<void>(`/api/locations/${id}`, { method: 'DELETE' }),
   exportCsv: async (query: { linkId?: string; search?: string }) => {
-    const headers: Record<string, string> = {};
-    if (accessToken) headers.Authorization = `Bearer ${accessToken}`;
-    const res = await fetch(`${API_BASE}/api/locations/export.csv${toQuery(query)}`, {
-      headers,
-      credentials: 'include',
-    });
+    // A blob download can't go through apiRequest, so it has to repeat the 401 -> refresh
+    // -> retry handling itself; without it the first export after the access token expires
+    // fails outright instead of transparently renewing the session.
+    const fetchCsv = () =>
+      fetch(`${API_BASE}/api/locations/export.csv${toQuery(query)}`, {
+        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+        credentials: 'include',
+      });
+
+    let res = await fetchCsv();
+    if (res.status === 401 && (await refreshSession())) {
+      res = await fetchCsv();
+    }
     if (!res.ok) throw new ApiError(res.status, 'Failed to export CSV');
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
@@ -245,13 +252,17 @@ export const settingsApi = {
   updateTheme: (theme: Theme) =>
     apiRequest<{ user: UserDTO }>('/api/settings/theme', { method: 'PATCH', body: { theme } }),
   setUsername: (username: string) =>
-    apiRequest<{ user: UserDTO }>('/api/settings/username', { method: 'PATCH', body: { username } }),
+    apiRequest<{ user: UserDTO }>('/api/settings/username', {
+      method: 'PATCH',
+      body: { username },
+    }),
   setAvatarPreset: (avatarPreset: AvatarPreset) =>
     apiRequest<{ user: UserDTO }>('/api/settings/avatar', {
       method: 'PATCH',
       body: { avatarPreset },
     }),
-  clearAvatarPreset: () => apiRequest<{ user: UserDTO }>('/api/settings/avatar', { method: 'DELETE' }),
+  clearAvatarPreset: () =>
+    apiRequest<{ user: UserDTO }>('/api/settings/avatar', { method: 'DELETE' }),
   linkGoogle: (idToken: string) =>
     apiRequest<{ user: UserDTO }>('/api/settings/google', { method: 'PATCH', body: { idToken } }),
   unlinkGoogle: () => apiRequest<{ user: UserDTO }>('/api/settings/google', { method: 'DELETE' }),
