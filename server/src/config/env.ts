@@ -32,7 +32,20 @@ const envSchema = z.object({
   AUTH_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(10),
   VISITOR_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(20),
 
-  SOCKET_CORS_ORIGIN: z.string().url(),
+  // Comma-separated list. Firebase Hosting's CDN cannot proxy WebSocket upgrades, so the
+  // client opens its socket straight against Cloud Run instead of going through the
+  // /socket.io/** rewrite. That makes the connection cross-origin, and the site answers on
+  // both pindrop-locationtracker.web.app and .firebaseapp.com, so both have to be allowed.
+  SOCKET_CORS_ORIGIN: z
+    .string()
+    .min(1)
+    .transform((value) =>
+      value
+        .split(',')
+        .map((origin) => origin.trim())
+        .filter(Boolean),
+    )
+    .pipe(z.array(z.string().url()).min(1)),
 
   SMTP_HOST: z.string().optional().default(''),
   SMTP_PORT: z.coerce.number().int().positive().default(587),
